@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Filters;
+namespace App\Modules\Users\Http\Filters;
 
+use App\Http\Filters\AbstractFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserFilter extends AbstractFilter

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Modules\Users\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilterRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,12 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login'  => ['string'],
-            'first_name'  => ['string'],
-            'last_name'  => ['string'],
-            'email' => ['string'],
-            'role_id'  => ['exists:roles,id'],
+            'login'  => ['string','max:254', 'unique:users'],
+            'email' => ['email', 'max:254', 'unique:users'],
+            'password' => ['string', 'max:254'],
+            'first_name' => ['string', 'max:254'],
+            'last_name' => ['string', 'max:254'],
+            'role_id' => ['digits:1', 'max:254', 'exists:roles,id'],
         ];
     }
 }

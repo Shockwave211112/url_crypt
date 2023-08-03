@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Users\Services;
 
 use App\Exceptions\DataBaseException;
-use App\Models\User;
+use App\Modules\Users\Models\User;
 
 class UserService
 {
+
     /**
      * @param $data
-     * @return array
+     * @return User
      */
-    public function getInfo($data): array
+    public function getInfo($data)
     {
         return $data;
     }

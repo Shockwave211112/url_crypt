@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Users\Http\Controllers;
 
-use App\Http\Filters\UserFilter;
-use App\Http\Requests\User\FilterRequest;
-use App\Http\Requests\User\StoreRequest;
-use App\Http\Requests\User\UpdateRequest;
-use App\Models\User;
-use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Modules\Users\Http\Filters\UserFilter;
+use App\Modules\Users\Http\Requests\FilterRequest;
+use App\Modules\Users\Http\Requests\StoreRequest;
+use App\Modules\Users\Http\Requests\UpdateRequest;
+use App\Modules\Users\Models\User;
+use App\Modules\Users\Services\UserService;
 
 class UserController extends Controller
 {
@@ -72,7 +73,7 @@ class UserController extends Controller
 
     /**
      * @param UserService $service
-     * @return array
+     * @return User
      */
     public function getInfo(UserService $service)
     {

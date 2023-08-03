@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Modules\Users\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegistrationRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class RegistrationRequest extends FormRequest
         return [
             'login'  => ['required','string','max:254', 'unique:users'],
             'email' => ['required', 'email', 'max:254', 'unique:users'],
-            'password' => ['required', 'string', 'max:254', 'confirmed'],
+            'password' => ['required', 'string', 'max:254'],
             'first_name' => ['required', 'string', 'max:254'],
             'last_name' => ['required', 'string', 'max:254'],
+            'role_id' => ['required', 'digits:1', 'max:254', 'exists:roles,id'],
         ];
     }
 }

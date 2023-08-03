@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Auth\Services;
 
 use App\Exceptions\AuthException;
-use App\Models\Role;
-use App\Models\User;
+use App\Modules\Users\Models\Role;
+use App\Modules\Users\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 
