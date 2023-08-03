@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider
@@ -27,6 +28,12 @@ class ModuleServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom($path . '/' . $module . '/Migrations');
 
             $this->loadRoutesFrom($path . '/' . $module . '/Routes.php');
+
+//            Factory::guessFactoryNamesUsing(function ($module) {
+//                return '\\Database\\Factories\\' . class_basename($module) . 'Factory';
+//            });
         }
+
+
     }
 }

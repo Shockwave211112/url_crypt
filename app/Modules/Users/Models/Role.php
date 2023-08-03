@@ -11,7 +11,7 @@ class Role extends Model
 
     public $timestamps = false;
 
-    public const UNVERIFIED_USER = 'Unverified user';
+    public const UNVERIFIED_USER = 'Unverified';
     public const USER = 'User';
     public const ADMIN = 'Admin';
 
