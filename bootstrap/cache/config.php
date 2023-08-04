@@ -129,7 +129,8 @@
         'throttle' => 60,
       ),
     ),
-    'password_timeout' => 10800,
+    'password_timeout' => 180,
+    'email_verify_timeout' => 1440,
   ),
   'broadcasting' => 
   array (

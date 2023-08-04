@@ -52,6 +52,14 @@ class Handler extends ExceptionHandler
                 $exception->status
             );
         }
+        if ($exception instanceof EmailException) {
+            return response()->json(
+                [
+                    'message' => $exception->getMessage(),
+                ],
+                $exception->status
+            );
+        }
         return parent::render($request, $exception);
     }
 }

@@ -39,9 +39,24 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
     }
 
+    /**
+     * @param AuthService $service
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\EmailException
+     */
+    public function sendVerifyLink(AuthService $service)
+    {
+        return $service->sendVerifyLink(auth()->user());
+    }
+
+    /**
+     * @param Request $request
+     * @param AuthService $service
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\EmailException
+     */
     public function emailVerify(Request $request, AuthService $service)
     {
-        dd($request);
         return $service->emailVerify($request);
     }
 }

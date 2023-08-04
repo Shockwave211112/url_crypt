@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('confirm_links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->on('users')->onDelete('cascade');
-            $table->string('token')->unique();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->text('token')->unique();
             $table->dateTime('expiry_date');
 
             $table->timestamps();
