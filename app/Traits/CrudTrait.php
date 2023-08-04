@@ -23,10 +23,10 @@ trait CrudTrait
      */
     public function store($data)
     {
-        $dbrow = $this->model::create($data);
+        $record = $this->model::create($data);
 
-        if (isset($dbrow)) {
-            if ($this->modelName == 'User') $dbrow->assignRole(User::BASIC_USER);
+        if (isset($record)) {
+            if ($this->modelName == 'User') $record->assignRole(User::BASIC_USER);
 
             return response()->json([
                 'message' => $this->modelName . ' added.'
@@ -43,10 +43,10 @@ trait CrudTrait
      */
     public function show($id)
     {
-        $dbrow = $this->model::find($id);
+        $record = $this->model::find($id);
 
-        if (isset($dbrow)) {
-            return $dbrow;
+        if (isset($record)) {
+            return $record;
         }
 
         throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
@@ -60,11 +60,11 @@ trait CrudTrait
      */
     public function update($id, $data)
     {
-        $dbrow = $this->model::find($id);
+        $record = $this->model::find($id);
 
-        if (isset($dbrow)) {
-            $dbrow->update($data);
-            if ($this->modelName == 'User') $dbrow->syncRoles($data['role_name']);
+        if (isset($record)) {
+            $record->update($data);
+            if ($this->modelName == 'User') $record->syncRoles($data['role_name']);
 
             return response()->json([
                 'message' =>  $this->modelName . ' updated.'
@@ -81,10 +81,10 @@ trait CrudTrait
      */
     public function delete(int $id)
     {
-        $dbrow = $this->model::find($id);
+        $record = $this->model::find($id);
 
-        if (isset($dbrow)) {
-            $dbrow->delete();
+        if (isset($record)) {
+            $record->delete();
 
             return response()->json([
                 'message' => $this->modelName . ' deleted.'

@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Modules\Auth\Events\PasswordResetting;
+use App\Modules\Auth\Events\UserRegistered;
+use App\Modules\Auth\Listeners\EmailVerifyListener;
+use App\Modules\Auth\Listeners\PasswordResetListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -15,8 +16,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        UserRegistered::class => [
+            EmailVerifyListener::class,
+        ],
+        PasswordResetting::class => [
+            PasswordResetListener::class,
         ],
     ];
 

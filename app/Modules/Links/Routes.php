@@ -5,8 +5,7 @@ use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    //USER
-    Route::group(['prefix' => 'urls'],
+    Route::group(['prefix' => 'links'],
         function () {
             Route::get('/info', [UserController::class, 'getInfo']);
             Route::group(

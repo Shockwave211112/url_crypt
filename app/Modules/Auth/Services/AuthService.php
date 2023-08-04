@@ -3,8 +3,8 @@
 namespace App\Modules\Auth\Services;
 
 use App\Exceptions\AuthException;
+use App\Modules\Auth\Events\UserRegistered;
 use App\Modules\Users\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -37,8 +37,8 @@ class AuthService
     {
         $user = User::create($data);
         $user->assignRole(User::BASIC_USER);
-
-        event(new Registered($user));
+        $url = 'asfasfasf';
+        event(new UserRegistered($user, $url));
 
         return response()->json([
             'token' => $user->createToken('auth')->plainTextToken,

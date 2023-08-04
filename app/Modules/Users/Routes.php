@@ -5,10 +5,8 @@ use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    //USER
     Route::group(['prefix' => 'user'],
         function () {
-            Route::get('/info', [UserController::class, 'getInfo']);
             Route::group(
                 ['middleware' => 'role:' . User::ADMIN],
                 function () {
