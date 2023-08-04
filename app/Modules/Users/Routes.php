@@ -1,7 +1,7 @@
 <?php
 
 use App\Modules\Users\Http\Controllers\UserController;
-use App\Modules\Users\Models\Role;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
@@ -10,7 +10,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         function () {
             Route::get('/info', [UserController::class, 'getInfo']);
             Route::group(
-                ['middleware' => 'role:' . Role::ADMIN],
+                ['middleware' => 'role:' . User::ADMIN],
                 function () {
                     Route::get('/', [UserController::class, 'index']);
                     Route::post('/', [UserController::class, 'store']);

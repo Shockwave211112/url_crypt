@@ -45,6 +45,7 @@
       24 => 'App\\Providers\\EventServiceProvider',
       25 => 'App\\Providers\\RouteServiceProvider',
       26 => 'App\\Providers\\ModuleServiceProvider',
+      27 => 'Spatie\\Permission\\PermissionServiceProvider',
     ),
     'aliases' => 
     array (
@@ -588,6 +589,59 @@
     array (
       0 => 'Auth',
       1 => 'Users',
+      2 => 'Links',
+    ),
+  ),
+  'permission' => 
+  array (
+    'models' => 
+    array (
+      'permission' => 'Spatie\\Permission\\Models\\Permission',
+      'role' => 'Spatie\\Permission\\Models\\Role',
+    ),
+    'table_names' => 
+    array (
+      'roles' => 'roles',
+      'permissions' => 'permissions',
+      'model_has_permissions' => 'users_model_permissions',
+      'model_has_roles' => 'users_model_roles',
+      'role_has_permissions' => 'role_has_permissions',
+    ),
+    'column_names' => 
+    array (
+      'role_pivot_key' => NULL,
+      'permission_pivot_key' => NULL,
+      'model_morph_key' => 'model_id',
+      'team_foreign_key' => 'team_id',
+    ),
+    'register_permission_check_method' => true,
+    'teams' => false,
+    'display_permission_in_exception' => false,
+    'display_role_in_exception' => false,
+    'enable_wildcard_permission' => false,
+    'cache' => 
+    array (
+      'expiration_time' => 
+      DateInterval::__set_state(array(
+         'y' => 0,
+         'm' => 0,
+         'd' => 0,
+         'h' => 24,
+         'i' => 0,
+         's' => 0,
+         'f' => 0.0,
+         'weekday' => 0,
+         'weekday_behavior' => 0,
+         'first_last_day_of' => 0,
+         'invert' => 0,
+         'days' => false,
+         'special_type' => 0,
+         'special_amount' => 0,
+         'have_weekday_relative' => 0,
+         'have_special_relative' => 0,
+      )),
+      'key' => 'spatie.permission.cache',
+      'store' => 'default',
     ),
   ),
   'queue' => 

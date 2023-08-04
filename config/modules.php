@@ -9,5 +9,6 @@ return [
     'modules' => [
         'Auth',
         'Users',
+        'Links',
     ],
 ];

@@ -22,12 +22,10 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login'  => ['string','max:254', 'unique:users'],
+            'name'  => ['string','max:254', 'unique:users'],
             'email' => ['email', 'max:254', 'unique:users'],
             'password' => ['string', 'max:254'],
-            'first_name' => ['string', 'max:254'],
-            'last_name' => ['string', 'max:254'],
-            'role_id' => ['digits:1', 'max:254', 'exists:roles,id'],
+            'role_name' => ['string', 'max:254', 'exists:roles,name'],
         ];
     }
 }

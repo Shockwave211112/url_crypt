@@ -9,18 +9,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Filterable;
+    use HasRoles;
+
+    const BASIC_USER = 'basic_user';
+    const ADMIN = 'admin';
+
+    protected $guard_name = 'web';
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        'login',
-        'first_name',
-        'last_name',
+        'name',
         'email',
         'password',
         'role_id'
@@ -44,11 +49,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function hasRole(string $role) {
-        $role_id = Role::where('name', $role)->first()->id;
-        return $this->role_id === $role_id;
-    }
-
+    /**
+     * @return Factory
+     */
     protected static function newFactory(): Factory
     {
         return UserFactory::new();

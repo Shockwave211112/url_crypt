@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('crypted_urls', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('user_url');
-            $table->string('hashed_url');
-            $table->dateTime('expiration_date');
+            $table->string('name');
+            $table->text('description');
+
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('crypted_urls');
+        Schema::dropIfExists('groups');
     }
 };

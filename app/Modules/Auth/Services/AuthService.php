@@ -3,7 +3,6 @@
 namespace App\Modules\Auth\Services;
 
 use App\Exceptions\AuthException;
-use App\Modules\Users\Models\Role;
 use App\Modules\Users\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
@@ -36,10 +35,8 @@ class AuthService
 
     public function registration(array $data)
     {
-        $role_id = Role::where('name', Role::UNVERIFIED_USER)->first()->id;
-        $data['role_id'] = $role_id;
-
         $user = User::create($data);
+        $user->assignRole(User::BASIC_USER);
 
         event(new Registered($user));
 

@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('links_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('group_id')->references('id')->on('groups')->onDelete('cascade');
+            $table->foreignId('link_id')->references('id')->on('links')->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('links_groups');
     }
 };

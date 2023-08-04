@@ -22,12 +22,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login'  => ['required','string','max:254', 'unique:users'],
+            'name'  => ['required','string','max:254', 'unique:users'],
             'email' => ['required', 'email', 'max:254', 'unique:users'],
-            'password' => ['required', 'string', 'max:254'],
-            'first_name' => ['required', 'string', 'max:254'],
-            'last_name' => ['required', 'string', 'max:254'],
-            'role_id' => ['required', 'digits:1', 'max:254', 'exists:roles,id'],
+            'password' => ['required', 'string', 'max:254']
         ];
     }
 }
