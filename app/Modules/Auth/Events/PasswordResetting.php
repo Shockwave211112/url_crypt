@@ -11,13 +11,23 @@ class PasswordResetting
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var User
+     */
     public User $user;
 
     /**
-     * Create a new event instance.
+     * @var string
      */
-    public function __construct($user)
+    public string $url;
+
+    /**
+     * @param $user
+     * @param $url
+     */
+    public function __construct($user, $url)
     {
         $this->user = $user;
+        $this->url = $url;
     }
 }
