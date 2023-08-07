@@ -4,16 +4,23 @@ namespace App\Traits;
 
 use App\Exceptions\DataBaseException;
 use App\Modules\Users\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 trait CrudTrait
 {
-    protected $model;
 
+    protected $model;
     protected $modelName;
 
     public function index()
     {
-        return $this->model::paginate(10);
+        $modelIndex = Cache::tags([$this->modelName, 'pagination'])
+            ->remember($this->modelName . '-page-' . request('page', default: 1), now()->addMinutes(180),
+                function () {
+                    return $this->model::paginate(10);
+                });
+
+        return $modelIndex;
     }
 
     /**
@@ -43,7 +50,11 @@ trait CrudTrait
      */
     public function show($id)
     {
-        $record = $this->model::find($id);
+        $record = Cache::tags($this->modelName)
+            ->remember($this->modelName . ':' . $id, now()->addMinutes(180),
+                function () use ($id) {
+                    return $this->model::find($id);
+                });
 
         if (isset($record)) {
             return $record;
@@ -67,11 +78,11 @@ trait CrudTrait
             if ($this->modelName == 'User') $record->syncRoles($data['role_name']);
 
             return response()->json([
-                'message' =>  $this->modelName . ' updated.'
+                'message' => $this->modelName . ' updated.'
             ]);
         }
 
-        throw new DataBaseException(message:  $this->modelName . ' not found.', status: 404);
+        throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
     }
 
     /**

@@ -47,9 +47,9 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\EmailException
      */
-    public function sendVerifyLink(AuthService $service)
+    public function resend(AuthService $service)
     {
-        return $service->sendVerifyLink(auth()->user());
+        return $service->resend(auth()->user());
     }
 
     /**

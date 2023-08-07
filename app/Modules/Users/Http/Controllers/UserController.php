@@ -7,51 +7,38 @@ use App\Modules\Users\Http\Requests\StoreRequest;
 use App\Modules\Users\Http\Requests\UpdateRequest;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Services\UserService;
+use App\Traits\PermissionsTrait;
 
 class UserController extends Controller
 {
-//    /**
-//     * @param FilterRequest $request
-//     * @return mixed
-//     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-//     */
-//    public function index(FilterRequest $request)
-//    {
-//        $data = $request->validated();
-//        $filter = app()->make(UserFilter::class, ['queryParams' => array_filter($data)]);
-//        $query = User::filter($filter);
-//
-//        if ($request->sort == null) {
-//            $sort = 'asc';
-//        } else {
-//            $sort = $request->sort;
-//        }
-//
-//        switch ($request->orderBy) {
-//            case 'login':
-//                $query->orderBy('login', $sort);
-//                break;
-//            case 'first_name':
-//                $query->orderBy('first_name', $sort);
-//                break;
-//            case 'last_name':
-//                $query->orderBy('last_name', $sort);
-//                break;
-//            case 'email':
-//                $query->orderBy('email', $sort);
-//                break;
-//            case 'role_id':
-//                $query->orderBy('role_id', $sort);
-//                break;
-//        }
-//        return $query->paginate(10);
-//    }
+    use PermissionsTrait;
+
+    public static $permissions = [
+        ['name' => 'user--list', 'description' => 'Viewing a list of users'],
+        ['name' => 'user--create', 'description' => 'Creating a new user'],
+        ['name' => 'user--update', 'description' => 'Editing user data'],
+        ['name' => 'user--delete', 'description' => 'Deleting a user'],
+        ['name' => 'user--show', 'description' => 'User information by ID'],
+        ['name' => 'user--info', 'description' => 'Information about the authorized user'],
+    ];
+
+    public function __construct()
+    {
+        $this->__constructPermissions();
+    }
+
+    /**
+     * @PermissionGuard user--list
+     * @param UserService $service
+     * @return mixed
+     */
     public function index(UserService $service)
     {
         return $service->index();
     }
 
     /**
+     * @PermissionGuard user--create
      * @param StoreRequest $request
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
@@ -63,6 +50,7 @@ class UserController extends Controller
     }
 
     /**
+     * @PermissionGuard user--show
      * @param $id
      * @param UserService $service
      * @return User
@@ -74,6 +62,7 @@ class UserController extends Controller
     }
 
     /**
+     * @PermissionGuard user--info
      * @param UserService $service
      * @return User
      */
@@ -83,6 +72,7 @@ class UserController extends Controller
     }
 
     /**
+     * @PermissionGuard user--update
      * @param $id
      * @param UpdateRequest $request
      * @param UserService $service
@@ -94,6 +84,13 @@ class UserController extends Controller
         return $service->update($id, $request->validated());
     }
 
+    /**
+     * @PermissionGuard user--delete
+     * @param $id
+     * @param UserService $service
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\DataBaseException
+     */
     public function delete($id, UserService $service)
     {
         return $service->delete($id);

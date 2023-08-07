@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Filterable;
+    use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
 
     const BASIC_USER = 'basic_user';

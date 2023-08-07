@@ -2,7 +2,6 @@
 
 namespace App\Modules\Users\Services;
 
-use App\Exceptions\DataBaseException;
 use App\Modules\Users\Models\User;
 use App\Traits\CrudTrait;
 

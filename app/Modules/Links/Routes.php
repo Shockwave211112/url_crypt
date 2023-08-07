@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'links'],
         function () {
-            Route::get('/info', [UserController::class, 'getInfo']);
             Route::group(
                 ['middleware' => 'role:' . User::ADMIN],
                 function () {

@@ -58,7 +58,7 @@ class AuthService
      * @return \Illuminate\Http\JsonResponse
      * @throws EmailException
      */
-    public function sendVerifyLink($user)
+    public function resend($user)
     {
         if ($user->hasVerifiedEmail()) {
             throw new EmailException(message: 'Email already verified!', status: '403');

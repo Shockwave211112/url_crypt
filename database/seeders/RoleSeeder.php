@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Users\Http\Controllers\UserController;
 use App\Modules\Users\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -28,5 +29,7 @@ class RoleSeeder extends Seeder
             'description' => 'Ограничения на создание групп и ссылок',
             'is_default' => 1
         ]);
+
+        $user->givePermissionTo('user--info');
     }
 }

@@ -36,7 +36,8 @@
     32 => 'App\\Providers\\EventServiceProvider',
     33 => 'App\\Providers\\RouteServiceProvider',
     34 => 'App\\Providers\\ModuleServiceProvider',
-    35 => 'Spatie\\Permission\\PermissionServiceProvider',
+    35 => 'App\\Providers\\GlobalObserverProvider',
+    36 => 'Spatie\\Permission\\PermissionServiceProvider',
   ),
   'eager' => 
   array (
@@ -61,7 +62,8 @@
     18 => 'App\\Providers\\EventServiceProvider',
     19 => 'App\\Providers\\RouteServiceProvider',
     20 => 'App\\Providers\\ModuleServiceProvider',
-    21 => 'Spatie\\Permission\\PermissionServiceProvider',
+    21 => 'App\\Providers\\GlobalObserverProvider',
+    22 => 'Spatie\\Permission\\PermissionServiceProvider',
   ),
   'deferred' => 
   array (

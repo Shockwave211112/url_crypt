@@ -45,7 +45,8 @@
       24 => 'App\\Providers\\EventServiceProvider',
       25 => 'App\\Providers\\RouteServiceProvider',
       26 => 'App\\Providers\\ModuleServiceProvider',
-      27 => 'Spatie\\Permission\\PermissionServiceProvider',
+      27 => 'App\\Providers\\GlobalObserverProvider',
+      28 => 'Spatie\\Permission\\PermissionServiceProvider',
     ),
     'aliases' => 
     array (
@@ -178,7 +179,7 @@
   ),
   'cache' => 
   array (
-    'default' => 'file',
+    'default' => 'redis',
     'stores' => 
     array (
       'apc' => 
@@ -570,7 +571,7 @@
     ),
     'from' => 
     array (
-      'address' => 'john.doe@example.org',
+      'address' => 'hide_url@notify.com',
       'name' => 'Rest',
     ),
     'markdown' => 
@@ -647,7 +648,7 @@
   ),
   'queue' => 
   array (
-    'default' => 'sync',
+    'default' => 'redis',
     'connections' => 
     array (
       'sync' => 

@@ -13,6 +13,6 @@ Route::post('/change-password', [AuthController::class, 'resetPassword']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::get('/email/resend', [AuthController::class, 'sendVerifyLink']);
+    Route::get('/email/resend', [AuthController::class, 'resend']);
     Route::get('/logout', [AuthController::class, 'logout']);
 });
