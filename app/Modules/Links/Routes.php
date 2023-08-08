@@ -1,21 +1,20 @@
 <?php
 
-use App\Modules\Users\Http\Controllers\UserController;
-use App\Modules\Users\Models\User;
+use App\Modules\Links\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::group(['prefix' => 'links'],
-        function () {
-            Route::group(
-                ['middleware' => 'role:' . User::ADMIN],
-                function () {
-                    Route::get('/', [UserController::class, 'index']);
-                    Route::post('/', [UserController::class, 'store']);
-                    Route::get('/{id}', [UserController::class, 'show']);
-                    Route::put('/{id}', [UserController::class, 'update']);
-                    Route::delete('/{id}', [UserController::class, 'delete']);
-                });
-        }
-    );
-});
+Route::get('/l/{referral}', [LinkController::class, 'referral'])->name('link.referral');
+
+Route::group(['prefix' => 'links'],
+    function () {
+        Route::group(['middleware' => 'auth:sanctum'], function() {
+            Route::get('/', [LinkController::class, 'index']);
+            Route::post('/', [LinkController::class, 'store']);
+            Route::get('/{id}', [LinkController::class, 'show']);
+            Route::put('/{id}', [LinkController::class, 'update']);
+            Route::delete('/{id}', [LinkController::class, 'delete']);
+        });
+
+    }
+);
+

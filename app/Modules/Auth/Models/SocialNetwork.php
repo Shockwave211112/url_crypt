@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Modules\Links\Models;
+namespace App\Modules\Auth\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LinksStatistic extends Model
+class SocialNetwork extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        'date',
-        'link_id',
-        'hits'
+        'user_id',
+        'provider',
+        'social_id',
+        'raw_data'
     ];
 }

@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('group_id')->references('id')->on('groups')->onDelete('cascade');
             $table->foreignId('link_id')->references('id')->on('links')->onDelete('cascade');
-
-            $table->timestamps();
         });
     }
 

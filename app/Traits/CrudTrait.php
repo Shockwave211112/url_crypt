@@ -3,8 +3,10 @@
 namespace App\Traits;
 
 use App\Exceptions\DataBaseException;
+use App\Modules\Links\Models\Link;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 trait CrudTrait
 {
@@ -24,17 +26,25 @@ trait CrudTrait
     }
 
     /**
-     * @param $data
+     * @param User $user
+     * @param array $data
      * @return \Illuminate\Http\JsonResponse
      * @throws DataBaseException
      */
-    public function store($data)
+    public function store(User $user, array $data)
     {
+        if ($this->modelName == 'Link') {
+            do {
+                $data['referral'] = Str::random(10);
+                $referralInDb = Link::where('referral', $data['referral'])->first();
+            } while (isset($referralInDb));
+        }
+
         $record = $this->model::create($data);
 
         if (isset($record)) {
             if ($this->modelName == 'User') $record->assignRole(User::BASIC_USER);
-
+            if ($this->modelName == 'Link') $record->users()->attach($user->id);
             return response()->json([
                 'message' => $this->modelName . ' added.'
             ]);

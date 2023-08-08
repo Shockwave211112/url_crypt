@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Users\Http\Requests;
+namespace App\Modules\Links\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,9 +23,8 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name'  => ['string', 'max:254'],
-            'email' => ['email', 'max:254', 'unique:users'],
-            'password' => ['string', 'max:254'],
-            'role_name' => ['string', 'max:254', 'exists:roles,name'],
+            'description' => ['string', 'max:254'],
+            'origin' => ['string', 'max:254']
         ];
     }
 }

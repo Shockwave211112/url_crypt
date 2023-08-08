@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Links\Http\Controllers\LinkController;
 use App\Modules\Users\Http\Controllers\UserController;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -15,6 +16,7 @@ class PermissionsSeeder extends Seeder
     {
         $controllers = [
             UserController::class,
+            LinkController::class
         ];
 
         foreach ($controllers as $controller) {

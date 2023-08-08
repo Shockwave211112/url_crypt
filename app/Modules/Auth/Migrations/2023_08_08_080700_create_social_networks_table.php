@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('links', function (Blueprint $table) {
+        Schema::create('social_networks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->string('origin');
-            $table->string('referral')->unique();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('provider');
+            $table->text('social_id')->unique();
+            $table->jsonb('raw_data');
 
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('links');
+        Schema::dropIfExists('social_networks');
     }
 };

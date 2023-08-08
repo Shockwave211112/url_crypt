@@ -46,17 +46,17 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request, UserService $service)
     {
-        return $service->store($request->validated());
+        return $service->store(auth()->user(), $request->validated());
     }
 
     /**
      * @PermissionGuard user--show
-     * @param $id
+     * @param int $id
      * @param UserService $service
      * @return User
      * @throws \App\Exceptions\DataBaseException
      */
-    public function show($id, UserService $service)
+    public function show(int $id, UserService $service)
     {
         return $service->show($id);
     }
@@ -73,25 +73,25 @@ class UserController extends Controller
 
     /**
      * @PermissionGuard user--update
-     * @param $id
+     * @param int $id
      * @param UpdateRequest $request
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\DataBaseException
      */
-    public function update($id, UpdateRequest $request, UserService $service)
+    public function update(int $id, UpdateRequest $request, UserService $service)
     {
         return $service->update($id, $request->validated());
     }
 
     /**
      * @PermissionGuard user--delete
-     * @param $id
+     * @param int $id
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\DataBaseException
      */
-    public function delete($id, UserService $service)
+    public function delete(int $id, UserService $service)
     {
         return $service->delete($id);
     }

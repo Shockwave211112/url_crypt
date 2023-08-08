@@ -3,7 +3,11 @@
 use App\Modules\Auth\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth', [AuthController::class, 'login']);
+
+Route::get('/auth/{provider}/redirect', [AuthController::class, 'oauth']);
+Route::get('/auth/{provider}/callback', [AuthController::class, 'callback']);
+
 Route::post('/registration', [AuthController::class, 'registration']);
 
 Route::get('/email/verify', [AuthController::class, 'emailVerify'])->name('email.verify');

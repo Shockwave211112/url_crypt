@@ -746,6 +746,18 @@
       'secret' => '',
       'region' => 'us-east-1',
     ),
+    'google' => 
+    array (
+      'client_id' => '439673656943-vrrc16gfiu2kf894pv3ddhiaqt675ept.apps.googleusercontent.com',
+      'client_secret' => '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',
+      'redirect' => 'http://localhost:8000/auth/google/callback',
+    ),
+    'facebook' => 
+    array (
+      'client_id' => '600398768673406',
+      'client_secret' => 'e5b5aa068ef40da48bf372adfcaccf3e',
+      'redirect' => 'http://localhost:8000/auth/facebook/callback',
+    ),
   ),
   'session' => 
   array (

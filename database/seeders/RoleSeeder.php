@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Modules\Users\Http\Controllers\UserController;
 use App\Modules\Users\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -18,7 +17,7 @@ class RoleSeeder extends Seeder
             'id' => 1,
             'name' => User::ADMIN,
             'guard_name' => 'web',
-            'description' => 'Никаких ограничений',
+            'description' => 'No restrictions',
             'is_default' => 0
         ]);
 
@@ -26,7 +25,7 @@ class RoleSeeder extends Seeder
             'id' => 2,
             'name' => User::BASIC_USER,
             'guard_name' => 'web',
-            'description' => 'Ограничения на создание групп и ссылок',
+            'description' => 'Restrictions on creating groups and links',
             'is_default' => 1
         ]);
 

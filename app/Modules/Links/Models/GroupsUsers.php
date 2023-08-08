@@ -2,24 +2,19 @@
 
 namespace App\Modules\Links\Models;
 
+use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Groups extends Model
+class GroupsUsers extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
-    protected $fillable = [
-        'name',
-        'description'
-    ];
+    public $timestamps = false;
 
-    public function links(): BelongsToMany
+    public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Link::class);
+        return $this->belongsToMany(User::class, 'groups_users', 'group_id', 'user_id');
     }
 }

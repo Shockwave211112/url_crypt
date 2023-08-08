@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Modules\Auth\Models\ConfirmLinks;
 use App\Modules\Auth\Models\RestoreLinks;
-use App\Modules\Links\Models\Links;
+use App\Modules\Links\Models\Link;
 use App\Modules\Links\Models\LinksGroups;
 use App\Modules\Users\Models\User;
 
@@ -29,7 +29,7 @@ class GlobalObserverProvider extends ServiceProvider
     {
         $models = [
             User::class,
-            Links::class,
+            Link::class,
             LinksGroups::class,
             ConfirmLinks::class,
             RestoreLinks::class,

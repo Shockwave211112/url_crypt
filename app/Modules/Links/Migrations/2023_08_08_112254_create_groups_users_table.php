@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('links_statistics', function (Blueprint $table) {
+        Schema::create('groups_users', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('date');
-            $table->foreignId('link_id')->references('id')->on('links')->onDelete('cascade');
-            $table->integer('hits');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('group_id')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('links_statistics');
+        Schema::dropIfExists('groups_users');
     }
 };

@@ -5,7 +5,7 @@ namespace App\Modules\Links\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LinksStatistic extends Model
+class LinksUsers extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,7 @@ class LinksStatistic extends Model
      * @var string[]
      */
     protected $fillable = [
-        'date',
-        'link_id',
-        'hits'
+        'user_id',
+        'link_id'
     ];
 }

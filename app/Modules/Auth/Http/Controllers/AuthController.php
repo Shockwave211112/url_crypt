@@ -7,6 +7,7 @@ use App\Modules\Auth\Http\Requests\EmailVerifyRequest;
 use App\Modules\Auth\Http\Requests\ForgotRequest;
 use App\Modules\Auth\Http\Requests\LoginRequest;
 use App\Modules\Auth\Http\Requests\NewPasswordRequest;
+use App\Modules\Auth\Http\Requests\OauthRequest;
 use App\Modules\Auth\Http\Requests\RegistrationRequest;
 use App\Modules\Auth\Services\AuthService;
 use Illuminate\Http\Request;
@@ -87,5 +88,14 @@ class AuthController extends Controller
     public function resetPassword(NewPasswordRequest $request, AuthService $service)
     {
         return $service->resetPassword($request->validated());
+    }
+
+    public function oauth(OauthRequest $request, AuthService $service)
+    {
+        return $service->oauth($request->validated());
+    }
+    public function callback(OauthRequest $request, AuthService $service)
+    {
+        return $service->callback($request->validated());
     }
 }
