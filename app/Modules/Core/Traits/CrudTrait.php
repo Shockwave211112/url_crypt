@@ -5,7 +5,10 @@ namespace App\Modules\Core\Traits;
 use App\Modules\Core\Exceptions\AuthException;
 use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Links\Models\Group;
+use App\Modules\Links\Models\GroupUser;
 use App\Modules\Links\Models\Link;
+use App\Modules\Links\Models\LinkGroup;
+use App\Modules\Links\Models\LinkUser;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -37,6 +40,10 @@ trait CrudTrait
     public function store(User $user, array $data)
     {
         if ($this->modelName == 'Link') {
+            if (Group::whereIn('id', $user->groups->pluck('id'))->sum('count') >= 500) {
+                throw new DataBaseException('Maximum of links count reached.', 403);
+            }
+
             do {
                 $data['referral'] = Str::random(10);
                 $referralInDb = Link::where('referral', $data['referral'])->first();
@@ -48,11 +55,20 @@ trait CrudTrait
                 $group = Group::where('id', $data['group_id'])->first();
             }
 
+            if ($group->count >= 100) {
+                throw new DataBaseException('Please select other group. Max count of links reached.', 403);
+            }
+
             if (!$group->hasAccess($user)) {
                 throw new AuthException('No rights to the specified group.', 403);
             }
         }
 
+        if ($this->modelName == 'Group') {
+            if (GroupUser::where('user_id', $user->id)->count() >= 50) {
+                throw new DataBaseException('Maximum of groups count reached.', 403);
+            }
+        }
         $record = $this->model::create($data);
 
         if (isset($record)) {

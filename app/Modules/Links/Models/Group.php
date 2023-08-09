@@ -22,12 +22,12 @@ class Group extends Model
 
     public function links(): BelongsToMany
     {
-        return $this->belongsToMany(Link::class, 'link_group', 'group_id', 'link_id');
+        return $this->belongsToMany(Link::class, 'link_groups', 'group_id', 'link_id');
     }
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot(['user_id']);
+        return $this->belongsToMany(User::class, 'group_users', 'group_id', 'user_id')->withPivot(['user_id']);
     }
 
     /**
@@ -36,6 +36,6 @@ class Group extends Model
      */
     public function hasAccess(User $user): bool
     {
-        return $this->users->first()->pivot->user_id === $user->id;
+        return in_array($user->id, $this->users->pluck('id')->toArray());
     }
 }
