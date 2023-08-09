@@ -3,7 +3,7 @@
 namespace App\Modules\Links\Jobs;
 
 use App\Modules\Links\Models\Link;
-use App\Modules\Links\Models\LinksStatistic;
+use App\Modules\Links\Models\LinkStatistic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,9 +33,9 @@ class LinkHit implements ShouldQueue
     public function handle(): void
     {
         $nowDate = now()->toDateString();
-        $linkStat = LinksStatistic::where('link_id', $this->link->id)->where('date', $nowDate)->first();
+        $linkStat = LinkStatistic::where('link_id', $this->link->id)->where('date', $nowDate)->first();
         if (!isset($linkStat)) {
-            $linkStat = LinksStatistic::create([
+            $linkStat = LinkStatistic::create([
                 'link_id' => $this->link->id,
                 'date' => $nowDate,
                 'hits' => 1

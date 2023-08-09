@@ -1,7 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Modules\Users\Seeders;
 
+use App\Modules\Links\Models\Group;
 use App\Modules\Users\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +18,13 @@ class UserSeeder extends Seeder
             'email' => 'admin@admin.ru',
             'password' => '111111'
         ]);
+
         $admin->assignRole('admin');
+
+        $linkGroup = Group::create([
+            'name' => $admin->name . ' Default',
+            'description' => 'Default group for user - ' . $admin->name,
+        ]);
+        $linkGroup->users()->attach($admin->id);
     }
 }

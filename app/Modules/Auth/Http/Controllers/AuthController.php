@@ -18,7 +18,7 @@ class AuthController extends Controller
      * @param LoginRequest $request
      * @param AuthService $service
      * @return string
-     * @throws \App\Exceptions\AuthException
+     * @throws \App\Modules\Core\Exceptions\AuthException
      */
     public function login(LoginRequest $request, AuthService $service)
     {
@@ -46,7 +46,7 @@ class AuthController extends Controller
     /**
      * @param AuthService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\EmailException
+     * @throws \App\Modules\Core\Exceptions\EmailException
      */
     public function resend(AuthService $service)
     {
@@ -57,7 +57,7 @@ class AuthController extends Controller
      * @param Request $request
      * @param AuthService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\EmailException
+     * @throws \App\Modules\Core\Exceptions\EmailException
      */
     public function emailVerify(EmailVerifyRequest $request, AuthService $service)
     {
@@ -83,7 +83,7 @@ class AuthController extends Controller
      * @param NewPasswordRequest $request
      * @param AuthService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\EmailException
+     * @throws \App\Modules\Core\Exceptions\EmailException
      */
     public function resetPassword(NewPasswordRequest $request, AuthService $service)
     {
@@ -94,6 +94,7 @@ class AuthController extends Controller
     {
         return $service->oauth($request->validated());
     }
+
     public function callback(OauthRequest $request, AuthService $service)
     {
         return $service->callback($request->validated());

@@ -3,11 +3,11 @@
 namespace App\Modules\Users\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Core\Traits\PermissionsTrait;
 use App\Modules\Users\Http\Requests\StoreRequest;
 use App\Modules\Users\Http\Requests\UpdateRequest;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Services\UserService;
-use App\Traits\PermissionsTrait;
 
 class UserController extends Controller
 {
@@ -42,7 +42,7 @@ class UserController extends Controller
      * @param StoreRequest $request
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function store(StoreRequest $request, UserService $service)
     {
@@ -54,11 +54,11 @@ class UserController extends Controller
      * @param int $id
      * @param UserService $service
      * @return User
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function show(int $id, UserService $service)
     {
-        return $service->show($id);
+        return $service->show(auth()->user(), $id);
     }
 
     /**
@@ -77,11 +77,11 @@ class UserController extends Controller
      * @param UpdateRequest $request
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function update(int $id, UpdateRequest $request, UserService $service)
     {
-        return $service->update($id, $request->validated());
+        return $service->update(auth()->user(), $id, $request->validated());
     }
 
     /**
@@ -89,10 +89,10 @@ class UserController extends Controller
      * @param int $id
      * @param UserService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function delete(int $id, UserService $service)
     {
-        return $service->delete($id);
+        return $service->delete(auth()->user(), $id);
     }
 }

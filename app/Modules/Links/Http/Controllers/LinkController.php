@@ -3,10 +3,10 @@
 namespace App\Modules\Links\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Core\Traits\PermissionsTrait;
+use App\Modules\Links\Http\Requests\LinkStoreRequest;
+use App\Modules\Links\Http\Requests\LinkUpdateRequest;
 use App\Modules\Links\Services\LinkService;
-use App\Modules\Links\Http\Requests\StoreRequest;
-use App\Modules\Links\Http\Requests\UpdateRequest;
-use App\Traits\PermissionsTrait;
 
 class LinkController extends Controller
 {
@@ -37,12 +37,12 @@ class LinkController extends Controller
 
     /**
      * @PermissionGuard link--create
-     * @param StoreRequest $request
+     * @param LinkStoreRequest $request
      * @param LinkService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
-    public function store(StoreRequest $request, LinkService $service)
+    public function store(LinkStoreRequest $request, LinkService $service)
     {
         return $service->store(auth()->user(), $request->validated());
     }
@@ -52,24 +52,24 @@ class LinkController extends Controller
      * @param int $id
      * @param LinkService $service
      * @return Object
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function show(int $id, LinkService $service)
     {
-        return $service->show($id);
+        return $service->show(auth()->user(), $id);
     }
 
     /**
      * @PermissionGuard link--update
      * @param int $id
-     * @param UpdateRequest $request
+     * @param LinkUpdateRequest $request
      * @param LinkService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
-    public function update(int $id, UpdateRequest $request, LinkService $service)
+    public function update(int $id, LinkUpdateRequest $request, LinkService $service)
     {
-        return $service->update($id, $request->validated());
+        return $service->update(auth()->user(), $id, $request->validated());
     }
 
     /**
@@ -77,18 +77,18 @@ class LinkController extends Controller
      * @param int $id
      * @param LinkService $service
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function delete(int $id, LinkService $service)
     {
-        return $service->delete($id);
+        return $service->delete(auth()->user(), $id);
     }
 
     /**
      * @param string $referral
      * @param LinkService $service
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \App\Exceptions\DataBaseException
+     * @throws \App\Modules\Core\Exceptions\DataBaseException
      */
     public function referral(string $referral, LinkService $service)
     {

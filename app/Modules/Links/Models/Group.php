@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Link extends Model
+class Group extends Model
 {
     use HasFactory;
 
@@ -17,18 +17,17 @@ class Link extends Model
     protected $fillable = [
         'name',
         'description',
-        'origin',
-        'referral',
+        'count'
     ];
 
-    public function groups(): BelongsToMany
+    public function links(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class, 'link_group', 'link_id', 'group_id');
+        return $this->belongsToMany(Link::class, 'link_group', 'group_id', 'link_id');
     }
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'link_user', 'link_id', 'user_id');
+        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot(['user_id']);
     }
 
     /**

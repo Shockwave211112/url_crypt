@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('links_groups', function (Blueprint $table) {
+        Schema::create('link_group', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_id')->references('id')->on('groups')->onDelete('cascade');
             $table->foreignId('link_id')->references('id')->on('links')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('links_groups');
+        Schema::dropIfExists('link_group');
     }
 };

@@ -6,7 +6,7 @@
     'debug' => true,
     'url' => 'http://localhost',
     'asset_url' => NULL,
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
@@ -44,8 +44,8 @@
       23 => 'App\\Providers\\AuthServiceProvider',
       24 => 'App\\Providers\\EventServiceProvider',
       25 => 'App\\Providers\\RouteServiceProvider',
-      26 => 'App\\Providers\\ModuleServiceProvider',
-      27 => 'App\\Providers\\GlobalObserverProvider',
+      26 => 'App\\Modules\\Core\\Providers\\ModuleServiceProvider',
+      27 => 'App\\Modules\\Core\\Providers\\GlobalObserverProvider',
       28 => 'Spatie\\Permission\\PermissionServiceProvider',
     ),
     'aliases' => 
@@ -720,7 +720,7 @@
     array (
       0 => 'web',
     ),
-    'expiration' => NULL,
+    'expiration' => 1440,
     'middleware' => 
     array (
       'verify_csrf_token' => 'App\\Http\\Middleware\\VerifyCsrfToken',

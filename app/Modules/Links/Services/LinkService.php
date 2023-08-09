@@ -2,10 +2,10 @@
 
 namespace App\Modules\Links\Services;
 
-use App\Exceptions\DataBaseException;
+use App\Modules\Core\Exceptions\DataBaseException;
+use App\Modules\Core\Traits\CrudTrait;
 use App\Modules\Links\Jobs\LinkHit;
 use App\Modules\Links\Models\Link;
-use App\Traits\CrudTrait;
 
 class LinkService
 {

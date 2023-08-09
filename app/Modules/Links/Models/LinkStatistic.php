@@ -5,7 +5,7 @@ namespace App\Modules\Links\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LinksStatistic extends Model
+class LinkStatistic extends Model
 {
     use HasFactory;
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Providers;
-
-use App\Observers\CacheObserver;
-use Illuminate\Support\ServiceProvider;
+namespace App\Modules\Core\Providers;
 
 use App\Modules\Auth\Models\ConfirmLinks;
 use App\Modules\Auth\Models\RestoreLinks;
+use App\Modules\Core\Observers\CacheObserver;
+use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\Link;
-use App\Modules\Links\Models\LinksGroups;
+use App\Modules\Links\Models\LinkGroup;
 use App\Modules\Users\Models\User;
+use Illuminate\Support\ServiceProvider;
 
 
 class GlobalObserverProvider extends ServiceProvider
@@ -30,9 +30,10 @@ class GlobalObserverProvider extends ServiceProvider
         $models = [
             User::class,
             Link::class,
-            LinksGroups::class,
+            LinkGroup::class,
             ConfirmLinks::class,
             RestoreLinks::class,
+            Group::class,
         ];
 
         foreach ($models as $model) {

@@ -4,22 +4,18 @@ namespace App\Modules\Links\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Groups extends Model
+class LinkUser extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'description'
+        'user_id',
+        'link_id'
     ];
-
-    public function links(): BelongsToMany
-    {
-        return $this->belongsToMany(Link::class);
-    }
 }

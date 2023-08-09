@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Modules\Core\Exceptions\AuthException;
+use App\Modules\Core\Exceptions\DataBaseException;
+use App\Modules\Core\Exceptions\EmailException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class GroupsUsers extends Model
+class GroupUser extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,6 @@ class GroupsUsers extends Model
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'groups_users', 'group_id', 'user_id');
+        return $this->belongsToMany(User::class);
     }
 }

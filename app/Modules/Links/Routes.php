@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Links\Http\Controllers\GroupController;
 use App\Modules\Links\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,19 @@ Route::group(['prefix' => 'links'],
             Route::put('/{id}', [LinkController::class, 'update']);
             Route::delete('/{id}', [LinkController::class, 'delete']);
         });
-
     }
 );
+
+Route::group(['prefix' => 'groups'],
+    function () {
+        Route::group(['middleware' => 'auth:sanctum'], function() {
+            Route::get('/', [GroupController::class, 'index']);
+            Route::post('/', [GroupController::class, 'store']);
+            Route::get('/{id}', [GroupController::class, 'show']);
+            Route::put('/{id}', [GroupController::class, 'update']);
+            Route::delete('/{id}', [GroupController::class, 'delete']);
+        });
+    }
+);
+
 

@@ -2,8 +2,8 @@
 
 namespace App\Modules\Users\Services;
 
+use App\Modules\Core\Traits\CrudTrait;
 use App\Modules\Users\Models\User;
-use App\Traits\CrudTrait;
 
 class UserService
 {

@@ -1,7 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Modules\Users\Seeders;
 
+use App\Modules\Links\Http\Controllers\GroupController;
 use App\Modules\Links\Http\Controllers\LinkController;
 use App\Modules\Users\Http\Controllers\UserController;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,8 @@ class PermissionsSeeder extends Seeder
     {
         $controllers = [
             UserController::class,
-            LinkController::class
+            LinkController::class,
+            GroupController::class
         ];
 
         foreach ($controllers as $controller) {

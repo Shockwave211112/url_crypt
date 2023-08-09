@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -168,8 +168,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Providers\ModuleServiceProvider::class,
-        App\Providers\GlobalObserverProvider::class,
+        \App\Modules\Core\Providers\ModuleServiceProvider::class,
+        \App\Modules\Core\Providers\GlobalObserverProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
     ])->toArray(),
 

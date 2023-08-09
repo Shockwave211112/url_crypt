@@ -2,15 +2,15 @@
 
 namespace App\Modules\Auth\Services;
 
-use App\Exceptions\AuthException;
-use App\Exceptions\EmailException;
 use App\Modules\Auth\Events\PasswordResetting;
 use App\Modules\Auth\Events\UserRegistered;
 use App\Modules\Auth\Models\ConfirmLinks;
 use App\Modules\Auth\Models\RestoreLinks;
 use App\Modules\Auth\Models\SocialNetwork;
+use App\Modules\Core\Exceptions\AuthException;
+use App\Modules\Core\Exceptions\EmailException;
+use App\Modules\Links\Models\Group;
 use App\Modules\Users\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -48,7 +48,14 @@ class AuthService
     public function registration(array $data)
     {
         $user = User::create($data);
+
         $user->assignRole(User::BASIC_USER);
+
+        $linkGroup = Group::create([
+            'name' => $user->name . ' Default',
+            'description' => 'Default group for user - ' . $user->name,
+        ]);
+        $linkGroup->users()->attach($user->id);
 
         event(new UserRegistered($user, $this->generateUrl($user, 'verify')));
 

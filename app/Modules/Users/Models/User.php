@@ -2,10 +2,10 @@
 
 namespace App\Modules\Users\Models;
 
-use App\Modules\Links\Models\Groups;
+use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\Link;
+use App\Modules\Users\Factories\UserFactory;
 use App\Traits\Filterable;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -64,11 +64,11 @@ class User extends Authenticatable
 
     public function links(): BelongsToMany
     {
-        return $this->belongsToMany(Link::class, 'links_users', 'user_id', 'link_id');
+        return $this->belongsToMany(Link::class, 'link_user', 'user_id', 'link_id');
     }
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Groups::class, 'groups_users', 'user_id', 'group_id');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot(['user_id']);
     }
 }
