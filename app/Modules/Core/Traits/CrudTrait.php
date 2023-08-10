@@ -7,8 +7,6 @@ use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\GroupUser;
 use App\Modules\Links\Models\Link;
-use App\Modules\Links\Models\LinkGroup;
-use App\Modules\Links\Models\LinkUser;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -65,7 +63,7 @@ trait CrudTrait
         }
 
         if ($this->modelName == 'Group') {
-            if (GroupUser::where('user_id', $user->id)->count() >= 50) {
+            if ($user->groups->count() >= 50) {
                 throw new DataBaseException('Maximum of groups count reached.', 403);
             }
         }
@@ -183,7 +181,11 @@ trait CrudTrait
 
             //GROUP
             if ($this->modelName == 'Group') {
-                $defaultGroup = Group::where('name', $user->name . ' Default')->first();
+                $defaultGroup = $user->groups->first();
+
+                if ($record->id === $defaultGroup->id) {
+                    throw new DataBaseException('You cant delete default group.', 403);
+                }
                 foreach ($record->links->all() as $link) {
                     $link->groups()->attach($defaultGroup->id);
                     $defaultGroup->count++;

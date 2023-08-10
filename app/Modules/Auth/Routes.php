@@ -1,6 +1,8 @@
 <?php
 
 use App\Modules\Auth\Http\Controllers\AuthController;
+use App\Modules\Auth\Http\Controllers\PermissionsController;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth', [AuthController::class, 'login']);
@@ -19,4 +21,11 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/email/resend', [AuthController::class, 'resend']);
     Route::get('/logout', [AuthController::class, 'logout']);
+
+    Route::group(['prefix' => 'permissions', 'middleware' => 'role:' . User::ADMIN], function() {
+        Route::get('/', [PermissionsController::class, 'index']);
+        Route::get('/{id}', [PermissionsController::class, 'show']);
+        Route::post('/sync', [PermissionsController::class, 'sync']);
+    });
+
 });
