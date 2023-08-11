@@ -20,11 +20,5 @@ class UserSeeder extends Seeder
         ]);
 
         $admin->assignRole('admin');
-
-        $linkGroup = Group::create([
-            'name' => $admin->name . ' Default',
-            'description' => 'Default group for user - ' . $admin->name,
-        ]);
-        $linkGroup->users()->attach($admin->id);
     }
 }

@@ -46,7 +46,10 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request, UserService $service)
     {
-        return $service->store(auth()->user(), $request->validated());
+        if (!$request->has('role_id')) {
+            $request->input('role_id', 2);
+        }
+        return $service->store($request->validated());
     }
 
     /**

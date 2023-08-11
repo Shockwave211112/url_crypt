@@ -2,6 +2,7 @@
 
 namespace App\Modules\Users\Models;
 
+use App\Modules\Core\Traits\ModelBaseTrait;
 use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\Link;
 use App\Modules\Users\Factories\UserFactory;
@@ -20,6 +21,11 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasRoles;
+    use ModelBaseTrait;
+
+    public $defaultRelations = [
+        'role_id' => 'roles',
+    ];
 
     const BASIC_USER = 'basic_user';
     const ADMIN = 'admin';
@@ -32,8 +38,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'role_id'
+        'password'
     ];
 
     /**

@@ -2,12 +2,12 @@
 
 namespace App\Modules\Links\Services;
 
-use App\Modules\Core\Traits\CrudTrait;
+use App\Modules\Core\Traits\CRUDTrait;
 use App\Modules\Links\Models\Group;
 
 class GroupService
 {
-    use CrudTrait;
+    use CRUDTrait;
 
     /**
      * @param Group $model

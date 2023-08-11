@@ -5,103 +5,21 @@ namespace App\Modules\Core\Traits;
 use App\Modules\Core\Exceptions\AuthException;
 use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Links\Models\Group;
-use App\Modules\Links\Models\GroupUser;
-use App\Modules\Links\Models\Link;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
-trait CrudTrait
+trait CRUDTrait
 {
-
-    protected $model;
-    protected $modelName;
+    protected $repository;
 
     public function index()
     {
-        $modelIndex = Cache::tags([$this->modelName, 'pagination'])
-            ->remember($this->modelName . '-page-' . request('page', default: 1), now()->addMinutes(180),
-                function () {
-                    return $this->model::paginate(10);
-                });
-
-        return $modelIndex;
+        return $this->repository->index();
     }
 
-    /**
-     * @param User $user
-     * @param array $data
-     * @return \Illuminate\Http\JsonResponse
-     * @throws AuthException
-     * @throws DataBaseException
-     */
-    public function store(User $user, array $data)
+    public function store($data)
     {
-        if ($this->modelName == 'Link') {
-            if (Group::whereIn('id', $user->groups->pluck('id'))->sum('count') >= 500) {
-                throw new DataBaseException('Maximum of links count reached.', 403);
-            }
-
-            do {
-                $data['referral'] = Str::random(10);
-                $referralInDb = Link::where('referral', $data['referral'])->first();
-            } while (isset($referralInDb));
-
-            if (!isset($data['group_id'])) {
-                $group = Group::where('name', $user->name . ' Default')->first();
-            } else {
-                $group = Group::where('id', $data['group_id'])->first();
-            }
-
-            if ($group->count >= 100) {
-                throw new DataBaseException('Please select other group. Max count of links reached.', 403);
-            }
-
-            if (!$group->hasAccess($user)) {
-                throw new AuthException('No rights to the specified group.', 403);
-            }
-        }
-
-        if ($this->modelName == 'Group') {
-            if ($user->groups->count() >= 50) {
-                throw new DataBaseException('Maximum of groups count reached.', 403);
-            }
-        }
-        $record = $this->model::create($data);
-
-        if (isset($record)) {
-
-            //USER
-            if ($this->modelName == 'User') {
-                $record->assignRole(User::BASIC_USER);
-
-                $linkGroup = Group::create([
-                    'name' => $record->name . ' Default',
-                    'description' => 'Default group for user - ' . $record->name,
-                ]);
-                $linkGroup->users()->attach($record->id);
-            }
-
-            //LINK
-            if ($this->modelName == 'Link') {
-                $record->users()->attach($user->id);
-                $record->groups()->attach($group->id);
-
-                $group->count++;
-                $group->update();
-            }
-
-            //GROUP
-            if ($this->modelName == 'Group') {
-                $record->users()->attach($user->id);
-            }
-
-            return response()->json([
-                'message' => $this->modelName . ' added.'
-            ]);
-        }
-
-        throw new DataBaseException(message: 'Something went wrong while adding a ' . $this->modelName . '.');
+        return $this->repository->store($data);
     }
 
     /**

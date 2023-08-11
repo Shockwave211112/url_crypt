@@ -25,7 +25,8 @@ class LinkStoreRequest extends FormRequest
             'name'  => ['required', 'string', 'max:254'],
             'description' => ['required', 'string', 'max:254'],
             'origin' => ['required', 'string', 'max:254'],
-            'group_id' => ['integer', 'exists:groups,id']
+            'group_id' => ['integer', 'exists:groups,id'],
+            'user_id' => ['integer', 'exists:users,id']
         ];
     }
 }

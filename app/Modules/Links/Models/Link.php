@@ -11,6 +11,11 @@ class Link extends Model
 {
     use HasFactory;
 
+    public $defaultRelations = [
+        'group_id' => 'groups',
+        'user_id' => 'users',
+    ];
+
     /**
      * @var string[]
      */

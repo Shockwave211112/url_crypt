@@ -3,6 +3,8 @@
 namespace App\Modules\Links\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Core\Exceptions\AuthException;
+use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Core\Traits\PermissionsTrait;
 use App\Modules\Links\Http\Requests\LinkStoreRequest;
 use App\Modules\Links\Http\Requests\LinkUpdateRequest;
@@ -39,12 +41,26 @@ class LinkController extends Controller
      * @PermissionGuard link--create
      * @param LinkStoreRequest $request
      * @param LinkService $service
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Modules\Core\Exceptions\DataBaseException
+     * @return mixed
+     * @throws AuthException
+     * @throws DataBaseException
      */
     public function store(LinkStoreRequest $request, LinkService $service)
     {
-        return $service->store(auth()->user(), $request->validated());
+        $user = auth()->user();
+        $data = $request->validated();
+
+        $data['user_id'] = $user->id;
+        $data['referral'] = $service->generateReferral();
+        if (!isset($data['group_id'])) {
+            $data['group_id'] = $user->groups->where('name', 'like', '%Default')->first()->id;
+        }
+
+        $service->checkStorePermissions($user, $data);
+
+        $service->storeToGroup($data['group_id']);
+
+        return $service->store($data);
     }
 
     /**
@@ -52,7 +68,7 @@ class LinkController extends Controller
      * @param int $id
      * @param LinkService $service
      * @return Object
-     * @throws \App\Modules\Core\Exceptions\DataBaseException
+     * @throws DataBaseException
      */
     public function show(int $id, LinkService $service)
     {

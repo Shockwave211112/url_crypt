@@ -11,6 +11,10 @@ class Group extends Model
 {
     use HasFactory;
 
+    public $defaultRelations = [
+        'user_id' => 'users',
+    ];
+
     /**
      * @var string[]
      */
@@ -28,14 +32,5 @@ class Group extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_users', 'group_id', 'user_id')->withPivot(['user_id']);
-    }
-
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function hasAccess(User $user): bool
-    {
-        return in_array($user->id, $this->users->pluck('id')->toArray());
     }
 }
