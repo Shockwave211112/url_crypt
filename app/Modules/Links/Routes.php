@@ -12,7 +12,8 @@ Route::group(['prefix' => 'links'],
             Route::get('/', [LinkController::class, 'index']);
             Route::post('/', [LinkController::class, 'store']);
             Route::get('/{id}', [LinkController::class, 'show']);
-            Route::put('/{id}', [LinkController::class, 'update']);
+            Route::put('/{id}', [LinkController::class, 'put']);
+            Route::patch('/{id}', [LinkController::class, 'patch']);
             Route::delete('/{id}', [LinkController::class, 'delete']);
         });
     }
@@ -25,6 +26,7 @@ Route::group(['prefix' => 'groups'],
             Route::post('/', [GroupController::class, 'store']);
             Route::get('/{id}', [GroupController::class, 'show']);
             Route::put('/{id}', [GroupController::class, 'update']);
+            Route::patch('/{id}', [GroupController::class, 'update']);
             Route::delete('/{id}', [GroupController::class, 'delete']);
         });
     }

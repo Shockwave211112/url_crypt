@@ -44,7 +44,10 @@ class GroupController extends Controller
      */
     public function store(GroupStoreRequest $request, GroupService $service)
     {
-        return $service->store(auth()->user(), $request->validated());
+        $data = $request->validated();
+        $data['user_id'] = auth()->user()->id;
+
+        return $service->store($data);
     }
 
     /**

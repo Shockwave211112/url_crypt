@@ -2,7 +2,6 @@
 
 namespace App\Modules\Auth\Http\Requests;
 
-use App\Modules\Auth\Rules\isBase64;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

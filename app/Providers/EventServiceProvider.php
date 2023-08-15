@@ -6,6 +6,8 @@ use App\Modules\Auth\Events\PasswordResetting;
 use App\Modules\Auth\Events\UserRegistered;
 use App\Modules\Auth\Listeners\EmailVerifyListener;
 use App\Modules\Auth\Listeners\PasswordResetListener;
+use App\Modules\Links\Events\RelationUpdate;
+use App\Modules\Links\Listeners\RelationUpdateListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PasswordResetting::class => [
             PasswordResetListener::class,
+        ],
+        RelationUpdate::class => [
+            RelationUpdateListener::class,
         ],
     ];
 

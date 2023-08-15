@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Modules\Core\Observers\RelationObserver;
 use App\Modules\Core\Observers\UsersObserver;
-use App\Modules\Links\Models\Link;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\ServiceProvider;
 

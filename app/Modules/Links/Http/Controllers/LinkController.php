@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Modules\Core\Exceptions\AuthException;
 use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Core\Traits\PermissionsTrait;
+use App\Modules\Links\Http\Requests\LinkPatchRequest;
+use App\Modules\Links\Http\Requests\LinkPutRequest;
 use App\Modules\Links\Http\Requests\LinkStoreRequest;
-use App\Modules\Links\Http\Requests\LinkUpdateRequest;
+use App\Modules\Links\Services\GroupService;
 use App\Modules\Links\Services\LinkService;
+use Illuminate\Http\JsonResponse;
 
 class LinkController extends Controller
 {
@@ -52,13 +55,12 @@ class LinkController extends Controller
 
         $data['user_id'] = $user->id;
         $data['referral'] = $service->generateReferral();
+
         if (!isset($data['group_id'])) {
             $data['group_id'] = $user->groups->where('name', 'like', '%Default')->first()->id;
-        }
+        } else $service->checkStorePermissions($user, $data);
 
-        $service->checkStorePermissions($user, $data);
-
-        $service->storeToGroup($data['group_id']);
+        $service->groupCountIncrement($data['group_id']);
 
         return $service->store($data);
     }
@@ -67,44 +69,93 @@ class LinkController extends Controller
      * @PermissionGuard link--show
      * @param int $id
      * @param LinkService $service
-     * @return Object
+     * @return JsonResponse
      * @throws DataBaseException
      */
     public function show(int $id, LinkService $service)
     {
-        return $service->show(auth()->user(), $id);
+        $service->hasAccess(auth()->user(), $id);
+
+        return $service->show($id);
     }
 
     /**
      * @PermissionGuard link--update
      * @param int $id
-     * @param LinkUpdateRequest $request
-     * @param LinkService $service
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Modules\Core\Exceptions\DataBaseException
+     * @param LinkPutRequest $request
+     * @param LinkService $linkService
+     * @param GroupService $groupService
+     * @return JsonResponse
+     * @throws AuthException
      */
-    public function update(int $id, LinkUpdateRequest $request, LinkService $service)
+    public function put(int $id, LinkPutRequest $request, LinkService $linkService, GroupService $groupService)
     {
-        return $service->update(auth()->user(), $id, $request->validated());
+        $data = $request->validated();
+
+        if (isset($data['group_id'])) {
+            foreach ($data['group_id'] as $groupId) {
+                $groupService->hasAccess(auth()->user(), $groupId);
+            }
+
+            $relations = [
+                'groups' => $data['group_id']
+            ];
+            unset($data['group_id']);
+        }
+        else $relations = [];
+
+        return $linkService->put($id, $data, $relations);
+    }
+
+    /**
+     * @PermissionGuard link--update
+     * @param int $id
+     * @param LinkPatchRequest $request
+     * @param LinkService $linkService
+     * @param GroupService $groupService
+     * @return JsonResponse
+     * @throws AuthException
+     */
+    public function patch(int $id, LinkPatchRequest $request, LinkService $linkService, GroupService $groupService)
+    {
+        $data = $request->validated();
+
+        if (isset($data['group_id'])) {
+            foreach ($data['group_id'] as $groupId) {
+                $groupService->hasAccess(auth()->user(), $groupId);
+            }
+
+            $relations = [
+                'groups' => $data['group_id']
+            ];
+            unset($data['group_id']);
+        }
+        else $relations = [];
+
+        return $linkService->patch($id, $data, $relations);
     }
 
     /**
      * @PermissionGuard link--delete
      * @param int $id
      * @param LinkService $service
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Modules\Core\Exceptions\DataBaseException
+     * @return JsonResponse
+     * @throws AuthException
      */
     public function delete(int $id, LinkService $service)
     {
-        return $service->delete(auth()->user(), $id);
+        $service->hasAccess(auth()->user(), $id);
+
+        $service->groupsDecrement($id);
+
+        return $service->delete($id);
     }
 
     /**
      * @param string $referral
      * @param LinkService $service
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \App\Modules\Core\Exceptions\DataBaseException
+     * @throws DataBaseException
      */
     public function referral(string $referral, LinkService $service)
     {

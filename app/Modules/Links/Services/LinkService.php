@@ -45,12 +45,12 @@ class LinkService
      * Проверяет возможность добавления ссылки в указанную группу пользователем
      *
      * @param User $user
-     * @param $data
+     * @param array $data
      * @return void
      * @throws AuthException
      * @throws DataBaseException
      */
-    public function checkStorePermissions(User $user, $data)
+    public function checkStorePermissions(User $user, array $data)
     {
         if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray())) {
             throw new AuthException('You dont have permissions to add link in this group.', 403);
@@ -62,6 +62,21 @@ class LinkService
 
         if ($user->groups->where('id', $data['group_id'])->first()->count >= 100) {
             throw new DataBaseException('Please select other group. Max count of links reached.', 403);
+        }
+    }
+
+    /**
+     * Проверяет наличие связи между ссылкой и пользователем
+     *
+     * @param User $user
+     * @param int $id
+     * @return void
+     * @throws AuthException
+     */
+    public function hasAccess(User $user, int $id)
+    {
+        if (!in_array($id, $user->links->pluck('id')->toArray())) {
+            throw new AuthException('You dont have permissions to interact with this link.', 403);
         }
     }
 
@@ -81,13 +96,71 @@ class LinkService
     }
 
     /**
+     * Увеличить счётчик у группы с указанным ID
+     *
      * @param int $group_id
      * @return void
      */
-    public function storeToGroup(int $group_id)
+    public function groupCountIncrement(int $group_id)
     {
         $group = Group::where('id', $group_id)->first();
         $group->count++;
         $group->update();
+    }
+
+    /**
+     * Уменьшить счётчик у группы с указанным ID
+     *
+     * @param int $group_id
+     * @return void
+     */
+    public function groupCountDecrement(int $group_id)
+    {
+        $group = Group::where('id', $group_id)->first();
+        $group->count--;
+        $group->update();
+    }
+
+    /**
+     * Уменьшить счётчик у групп с указанной ссылкой
+     *
+     * @param int $linkId
+     * @return void
+     */
+    public function groupsDecrement(int $linkId)
+    {
+        $groups = Group::whereHas('links', function ($query) use ($linkId) {
+            $query->where('link_id', $linkId);
+        })->get();
+
+        foreach ($groups as $group) {
+            $group->count--;
+            $group->update();
+        }
+    }
+
+    /**
+     * Изменение счётчика у групп в связи с обновлением данных у ссылки
+     *
+     * @param int $linkId
+     * @param array $groups
+     * @return void
+     */
+    public function groupsUpdate(int $linkId, array $groups) {
+        if (count($groups)) {
+            $original = Link::where('id', $linkId)->first()->groups;
+
+            foreach ($original as $group) {
+                if (!in_array($group->id, $groups)) {
+                    $this->groupCountDecrement($group->id);
+                };
+            }
+
+            foreach ($groups as $newGroup) {
+                if (!in_array($newGroup, $original->pluck('id')->toArray())) {
+                    $this->groupCountIncrement($newGroup);
+                };
+            }
+        }
     }
 }

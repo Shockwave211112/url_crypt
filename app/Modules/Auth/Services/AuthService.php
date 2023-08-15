@@ -51,12 +51,6 @@ class AuthService
 
         $user->assignRole(User::BASIC_USER);
 
-        $linkGroup = Group::create([
-            'name' => $user->name . ' Default',
-            'description' => 'Default group for user - ' . $user->name,
-        ]);
-        $linkGroup->users()->attach($user->id);
-
         event(new UserRegistered($user, $this->generateUrl($user, 'verify')));
 
         return response()->json([

@@ -2,9 +2,10 @@
 
 namespace App\Modules\Links\Http\Requests;
 
+use App\Modules\Core\Rules\isNumericArray;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LinkStoreRequest extends FormRequest
+class LinkPatchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +23,10 @@ class LinkStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['required', 'string', 'max:254'],
-            'description' => ['required', 'string', 'max:254'],
-            'origin' => ['required', 'string', 'max:254'],
-            'group_id' => ['integer', 'exists:groups,id']
+            'name'  => ['string', 'max:254'],
+            'description' => ['string', 'max:254'],
+            'origin' => ['string', 'max:254'],
+            'group_id' => [new isNumericArray(), 'exists:groups,id']
         ];
     }
 }

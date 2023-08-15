@@ -2,11 +2,9 @@
 
 namespace App\Modules\Users\Models;
 
-use App\Modules\Core\Traits\ModelBaseTrait;
 use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\Link;
 use App\Modules\Users\Factories\UserFactory;
-use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,7 +19,6 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasRoles;
-    use ModelBaseTrait;
 
     public $defaultRelations = [
         'role_id' => 'roles',

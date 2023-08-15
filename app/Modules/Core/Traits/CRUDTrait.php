@@ -2,130 +2,66 @@
 
 namespace App\Modules\Core\Traits;
 
-use App\Modules\Core\Exceptions\AuthException;
-use App\Modules\Core\Exceptions\DataBaseException;
-use App\Modules\Links\Models\Group;
-use App\Modules\Users\Models\User;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\JsonResponse;
 
 trait CRUDTrait
 {
     protected $repository;
 
+    /**
+     * @return JsonResponse
+     */
     public function index()
     {
         return $this->repository->index();
     }
 
-    public function store($data)
+    /**
+     * @param array $data
+     * @return JsonResponse
+     */
+    public function store(array $data)
     {
         return $this->repository->store($data);
     }
 
     /**
-     * @param User $user
-     * @param $id
-     * @return mixed
-     * @throws DataBaseException
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show(User $user, $id)
+    public function show(int $id)
     {
-        $record = Cache::tags($this->modelName)
-            ->remember($this->modelName . ':' . $id, now()->addMinutes(180),
-                function () use ($id) {
-                    return $this->model::find($id);
-                });
-
-        if (isset($record)) {
-            return $record;
-        }
-
-        throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
-    }
-
-    /**
-     * @param $id
-     * @param $data
-     * @return \Illuminate\Http\JsonResponse
-     * @throws DataBaseException
-     */
-    public function update(User $user, $id, $data)
-    {
-        $record = $this->model::find($id);
-
-        if (isset($record)) {
-
-            //LINK
-            if ($this->modelName == 'Link' && isset($data['group_id'])) {
-                $group = Group::where('id', $data['group_id'])->first();
-
-                if (!$group->hasAccess($user)) {
-                    throw new AuthException('You dont have permissions to this group.', 403);
-                }
-
-                $record->groups()->detach();
-
-                $record->groups()->attach($data['group_id']);
-            }
-
-            //USER
-            if ($this->modelName == 'User') $record->syncRoles($data['role_name']);
-
-            $record->update($data);
-
-            return response()->json([
-                'message' => $this->modelName . ' updated.'
-            ]);
-        }
-
-        throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
+        return $this->repository->show($id);
     }
 
     /**
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws DataBaseException
+     * @param array $data
+     * @param array $relations
+     * @return JsonResponse
      */
-    public function delete(User $user, int $id)
+    public function put(int $id, array $data, array $relations)
     {
-        $record = $this->model::find($id);
+        return $this->repository->put($id, $data, $relations);
+    }
 
-        if (isset($record)) {
-            if ($this->modelName == 'Link' || 'Group') {
-                if (!$record->hasAccess($user)) {
-                    throw new AuthException('You dont have permissions for this ' . $this->modelName);
-                }
-            }
+    /**
+     * @param int $id
+     * @param array $data
+     * @param array $relations
+     * @return JsonResponse
+     */
+    public function patch(int $id, array $data, array $relations)
+    {
+        return $this->repository->patch($id, $data, $relations);
+    }
 
-            //GROUP
-            if ($this->modelName == 'Group') {
-                $defaultGroup = $user->groups->first();
-
-                if ($record->id === $defaultGroup->id) {
-                    throw new DataBaseException('You cant delete default group.', 403);
-                }
-                foreach ($record->links->all() as $link) {
-                    $link->groups()->attach($defaultGroup->id);
-                    $defaultGroup->count++;
-                }
-                $defaultGroup->update();
-            }
-
-            //LINK
-            if ($this->modelName == 'Link') {
-                foreach ($record->groups->all() as $group) {
-                    $group->count--;
-                    $group->update();
-                }
-            }
-
-            $record->delete();
-
-            return response()->json([
-                'message' => $this->modelName . ' deleted.'
-            ]);
-        }
-
-        throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete(int $id)
+    {
+        return $this->repository->delete($id);
     }
 }

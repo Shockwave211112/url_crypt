@@ -2,7 +2,7 @@
 
 namespace App\Modules\Auth\Http\Requests;
 
-use App\Modules\Auth\Rules\isBase64;
+use App\Modules\Core\Rules\isBase64;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EmailVerifyRequest extends FormRequest
