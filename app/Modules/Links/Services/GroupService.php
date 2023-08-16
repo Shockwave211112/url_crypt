@@ -4,6 +4,7 @@ namespace App\Modules\Links\Services;
 
 use App\Modules\Core\CRUDRepository;
 use App\Modules\Core\Exceptions\AuthException;
+use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Core\Traits\CRUDTrait;
 use App\Modules\Links\Models\Group;
 use App\Modules\Users\Models\User;
@@ -15,6 +16,22 @@ class GroupService
     public function __construct()
     {
         $this->repository = new CRUDRepository(new Group());
+    }
+
+    /**
+     * Проверка существования группы
+     *
+     * @param int $id
+     * @return void
+     * @throws DataBaseException
+     */
+    public function exists(int $id)
+    {
+        $group = Group::find($id);
+
+        if (!$group) {
+            throw new DataBaseException('Link not found.', 404);
+        }
     }
 
     /**

@@ -21,13 +21,11 @@ class CRUDRepository
 
     public function index()
     {
-        $modelIndex = Cache::tags([$this->modelName, 'pagination'])
+        return Cache::tags([$this->modelName, 'pagination'])
             ->remember($this->modelName . '-page-' . request('page', default: 1), now()->addMinutes(180),
                 function () {
                     return $this->model::paginate(10);
                 });
-
-        return $modelIndex;
     }
 
     /**
@@ -67,7 +65,7 @@ class CRUDRepository
                     return $this->model::find($id);
                 });
 
-        if (isset($record)) {
+        if ($record) {
             return response()->json([
                 'entity' => $record
             ]);
@@ -92,7 +90,7 @@ class CRUDRepository
         $data = $this->onlyFields($data, $fields);
         $record = $this->model::find($id);
 
-        if (isset($record)) {
+        if ($record) {
             $oldRecord = clone $record;
 
             if ($relations) {
@@ -149,7 +147,7 @@ class CRUDRepository
     {
         $record = $this->model::find($id);
 
-        if (isset($record)) {
+        if ($record) {
             $record->delete();
 
             return response()->json([
@@ -162,12 +160,13 @@ class CRUDRepository
 
     private static function onlyFields(array $data = [], array $fields = []): array
     {
-        if (!count($data) || !count($data)) return [];
+        if (!count($data) || !count($fields)) return [];
 
         $returnData = [];
 
         foreach ($fields as $field) {
             if (!isset($data[$field])) $data[$field] = null;
+
             $returnData[$field] = $data[$field];
         }
 

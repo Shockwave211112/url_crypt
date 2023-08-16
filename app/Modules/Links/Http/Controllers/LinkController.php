@@ -20,7 +20,8 @@ class LinkController extends Controller
     public static $permissions = [
         ['name' => 'link--list', 'description' => 'Viewing a list of links'],
         ['name' => 'link--create', 'description' => 'Creating a new link'],
-        ['name' => 'link--update', 'description' => 'Editing link data'],
+        ['name' => 'link--put', 'description' => 'Editing link data'],
+        ['name' => 'link--patch', 'description' => 'Partial editing link data'],
         ['name' => 'link--delete', 'description' => 'Deleting a link'],
         ['name' => 'link--show', 'description' => 'Link information by ID']
     ];
@@ -33,7 +34,7 @@ class LinkController extends Controller
     /**
      * @PermissionGuard link--list
      * @param LinkService $service
-     * @return mixed
+     * @return JsonResponse
      */
     public function index(LinkService $service)
     {
@@ -44,7 +45,7 @@ class LinkController extends Controller
      * @PermissionGuard link--create
      * @param LinkStoreRequest $request
      * @param LinkService $service
-     * @return mixed
+     * @return JsonResponse
      * @throws AuthException
      * @throws DataBaseException
      */
@@ -56,7 +57,7 @@ class LinkController extends Controller
         $data['user_id'] = $user->id;
         $data['referral'] = $service->generateReferral();
 
-        if (!isset($data['group_id'])) {
+        if (!$data['group_id']) {
             $data['group_id'] = $user->groups->where('name', 'like', '%Default')->first()->id;
         } else $service->checkStorePermissions($user, $data);
 
@@ -70,29 +71,35 @@ class LinkController extends Controller
      * @param int $id
      * @param LinkService $service
      * @return JsonResponse
+     * @throws AuthException
      * @throws DataBaseException
      */
     public function show(int $id, LinkService $service)
     {
+        $service->exists($id);
         $service->hasAccess(auth()->user(), $id);
 
         return $service->show($id);
     }
 
     /**
-     * @PermissionGuard link--update
+     * @PermissionGuard link--put
      * @param int $id
      * @param LinkPutRequest $request
      * @param LinkService $linkService
      * @param GroupService $groupService
      * @return JsonResponse
      * @throws AuthException
+     * @throws DataBaseException
      */
     public function put(int $id, LinkPutRequest $request, LinkService $linkService, GroupService $groupService)
     {
         $data = $request->validated();
 
-        if (isset($data['group_id'])) {
+        $linkService->exists($id);
+        $linkService->hasAccess(auth()->user(), $id);
+
+        if ($data['group_id']) {
             foreach ($data['group_id'] as $groupId) {
                 $groupService->hasAccess(auth()->user(), $groupId);
             }
@@ -108,19 +115,23 @@ class LinkController extends Controller
     }
 
     /**
-     * @PermissionGuard link--update
+     * @PermissionGuard link--patch
      * @param int $id
      * @param LinkPatchRequest $request
      * @param LinkService $linkService
      * @param GroupService $groupService
      * @return JsonResponse
      * @throws AuthException
+     * @throws DataBaseException
      */
     public function patch(int $id, LinkPatchRequest $request, LinkService $linkService, GroupService $groupService)
     {
         $data = $request->validated();
 
-        if (isset($data['group_id'])) {
+        $linkService->exists($id);
+        $linkService->hasAccess(auth()->user(), $id);
+
+        if ($data['group_id']) {
             foreach ($data['group_id'] as $groupId) {
                 $groupService->hasAccess(auth()->user(), $groupId);
             }
@@ -141,9 +152,11 @@ class LinkController extends Controller
      * @param LinkService $service
      * @return JsonResponse
      * @throws AuthException
+     * @throws DataBaseException
      */
     public function delete(int $id, LinkService $service)
     {
+        $service->exists($id);
         $service->hasAccess(auth()->user(), $id);
 
         $service->groupsDecrement($id);

@@ -5,7 +5,7 @@ namespace App\Modules\Links\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 class
-GroupUpdateRequest extends FormRequest
+GroupPatchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

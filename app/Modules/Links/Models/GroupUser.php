@@ -12,9 +12,4 @@ class GroupUser extends Model
     use HasFactory;
 
     public $timestamps = false;
-
-    public function groups(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
-    }
 }

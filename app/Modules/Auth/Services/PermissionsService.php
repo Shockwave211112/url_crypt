@@ -12,7 +12,7 @@ class PermissionsService
     {
         $permissions = Permission::all();
 
-        if(!isset($permissions)) {
+        if(!$permissions) {
             throw new DataBaseException('Unknown error.', 422);
         }
 
@@ -21,9 +21,9 @@ class PermissionsService
 
     public function show(int $id)
     {
-        $permission = Permission::where('id', $id)->first();
+        $permission = Permission::find($id);
 
-        if(!isset($permission)) {
+        if(!$permission) {
             throw new DataBaseException('Permission not found.', 404);
         }
 
@@ -34,16 +34,10 @@ class PermissionsService
     {
         $role = Role::where('id', $data['role_id'])->first();
 
-        $permissions = Permission::whereIn('id', $data['permissions'])->get();
+        $role->syncPermissions($data['permissions']);
 
-        $permissionsNames = $permissions->map(function ($permissions) {
-            return collect($permissions->toArray())
-                ->only('name')
-                ->all();
-        });
-        dd($permissionsNames);
-        $role->syncPermissions($permissionsNames);
-//        $role->givePermissionTo();
-        return $permissions;
+        return response()->json([
+            'message' => 'Permissions setted.',
+        ]);
     }
 }

@@ -40,7 +40,7 @@ trait CRUDTrait
      * @param array $relations
      * @return JsonResponse
      */
-    public function put(int $id, array $data, array $relations)
+    public function put(int $id, array $data, array $relations = [])
     {
         return $this->repository->put($id, $data, $relations);
     }
@@ -51,7 +51,7 @@ trait CRUDTrait
      * @param array $relations
      * @return JsonResponse
      */
-    public function patch(int $id, array $data, array $relations)
+    public function patch(int $id, array $data, array $relations = [])
     {
         return $this->repository->patch($id, $data, $relations);
     }

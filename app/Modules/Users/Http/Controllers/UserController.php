@@ -18,7 +18,8 @@ class UserController extends Controller
     public static $permissions = [
         ['name' => 'user--list', 'description' => 'Viewing a list of users'],
         ['name' => 'user--create', 'description' => 'Creating a new user'],
-        ['name' => 'user--update', 'description' => 'Editing user data'],
+        ['name' => 'user--put', 'description' => 'Editing user data'],
+        ['name' => 'user--patch', 'description' => 'Partial editing user data'],
         ['name' => 'user--delete', 'description' => 'Deleting a user'],
         ['name' => 'user--show', 'description' => 'User information by ID'],
         ['name' => 'user--info', 'description' => 'Information about the authorized user'],
@@ -49,7 +50,7 @@ class UserController extends Controller
     public function store(StoreRequest $request, UserService $service)
     {
         $data = $request->validated();
-        if (!isset($data['role_id'])) {
+        if (!$data['role_id']) {
             $data['role_id'] = 2;
         }
 
@@ -71,7 +72,7 @@ class UserController extends Controller
     /**
      * @PermissionGuard user--info
      * @param UserService $service
-     * @return User
+     * @return JsonResponse
      */
     public function getInfo(UserService $service)
     {
@@ -79,7 +80,7 @@ class UserController extends Controller
     }
 
     /**
-     * @PermissionGuard user--update
+     * @PermissionGuard user--put
      * @param int $id
      * @param UpdateRequest $request
      * @param UserService $service
@@ -88,7 +89,8 @@ class UserController extends Controller
     public function put(int $id, UpdateRequest $request, UserService $service)
     {
         $data = $request->validated();
-        if (isset($data['role_id'])) {
+
+        if ($data['role_id']) {
             $relations = [
                 'roles' => $data['role_id']
             ];
@@ -99,7 +101,7 @@ class UserController extends Controller
         return $service->put($id, $data, $relations);
     }
     /**
-     * @PermissionGuard user--update
+     * @PermissionGuard user--patch
      * @param int $id
      * @param UpdateRequest $request
      * @param UserService $service
@@ -108,7 +110,8 @@ class UserController extends Controller
     public function patch(int $id, UpdateRequest $request, UserService $service)
     {
         $data = $request->validated();
-        if (isset($data['role_id'])) {
+
+        if ($data['role_id']) {
             $relations = [
                 'roles' => $data['role_id']
             ];

@@ -24,11 +24,11 @@ class AuthService
     public function login(array $data)
     {
         $user = User::where('email', $data['email'])->first();
-        if (!isset($user)) {
+        if (!$user) {
             throw new AuthException(message: 'User not found.', status: '404');
         }
 
-        if (!isset($user->password)) {
+        if (!$user->password) {
             throw new AuthException(message: 'Please log in through the social network or reset your password.', status: '403');
         }
 
@@ -84,7 +84,7 @@ class AuthService
     public function emailVerify($data)
     {
         $confirmLink = ConfirmLinks::where('token', $data['token'])->first();
-        if (!isset($confirmLink)) {
+        if (!$confirmLink) {
             throw new EmailException(message: 'Link expired.', status: '404');
         }
 
@@ -98,7 +98,7 @@ class AuthService
 
         $userId = $splittedToken[1];
         $user = User::where('id', $userId)->first();
-        if (!isset($user)) {
+        if (!$user) {
             throw new EmailException(message: 'Verifying user not found.', status: '404');
         }
 
@@ -140,7 +140,7 @@ class AuthService
     public function resetPassword($data)
     {
         $restoreLink = RestoreLinks::where('token', $data['token'])->first();
-        if (!isset($restoreLink)) {
+        if (!$restoreLink) {
             throw new EmailException(message: 'Link expired.', status: '404');
         }
 
@@ -154,7 +154,7 @@ class AuthService
 
         $userId = $splittedToken[1];
         $user = User::where('id', $userId)->first();
-        if (!isset($user)) {
+        if (!$user) {
             throw new EmailException(message: 'Restoring user not found.', status: '404');
         }
 
@@ -214,12 +214,12 @@ class AuthService
     public function callback($data)
     {
         $socialData = Socialite::driver($data['provider'])->stateless()->user();
-        if (!isset($socialData)) {
+        if (!$socialData) {
             throw new AuthException(message: 'An error occurred during authorization via ' . $data['provider'], status: '403');
         }
 
         $user = User::where('email', $socialData->email)->first();
-        if (!isset($user)) {
+        if (!$user) {
             $user = User::create([
                 'name' => $socialData->name,
                 'email' => $socialData->email
@@ -229,7 +229,7 @@ class AuthService
         }
 
         $socialNetwork = SocialNetwork::where('social_id', $socialData->id)->first();
-        if (!isset($socialNetwork)) {
+        if (!$socialNetwork) {
             SocialNetwork::create([
                 'user_id' => $user->id,
                 'provider' => $data['provider'],

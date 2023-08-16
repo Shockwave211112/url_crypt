@@ -32,7 +32,7 @@ class LinkService
     {
         $link = Link::where('referral', $referral)->first();
 
-        if (!isset($link)) {
+        if (!$link) {
             throw new DataBaseException('Link not found.', 404);
         }
 
@@ -66,6 +66,22 @@ class LinkService
     }
 
     /**
+     * Проверка существования ссылки
+     *
+     * @param int $id
+     * @return void
+     * @throws DataBaseException
+     */
+    public function exists(int $id)
+    {
+        $link = Link::find($id);
+
+        if (!$link) {
+            throw new DataBaseException('Link not found.', 404);
+        }
+    }
+
+    /**
      * Проверяет наличие связи между ссылкой и пользователем
      *
      * @param User $user
@@ -90,7 +106,7 @@ class LinkService
         do {
             $referral = Str::random(10);
             $referralInDb = Link::where('referral', $referral)->first();
-        } while (isset($referralInDb));
+        } while ($referralInDb);
 
         return $referral;
     }
@@ -146,7 +162,8 @@ class LinkService
      * @param array $groups
      * @return void
      */
-    public function groupsUpdate(int $linkId, array $groups) {
+    public function groupsUpdate(int $linkId, array $groups)
+    {
         if (count($groups)) {
             $original = Link::where('id', $linkId)->first()->groups;
 

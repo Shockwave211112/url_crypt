@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Modules\Links\Models\Link;
+use App\Modules\Users\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 

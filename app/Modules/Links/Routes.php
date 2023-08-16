@@ -25,8 +25,8 @@ Route::group(['prefix' => 'groups'],
             Route::get('/', [GroupController::class, 'index']);
             Route::post('/', [GroupController::class, 'store']);
             Route::get('/{id}', [GroupController::class, 'show']);
-            Route::put('/{id}', [GroupController::class, 'update']);
-            Route::patch('/{id}', [GroupController::class, 'update']);
+            Route::put('/{id}', [GroupController::class, 'put']);
+            Route::patch('/{id}', [GroupController::class, 'patch']);
             Route::delete('/{id}', [GroupController::class, 'delete']);
         });
     }

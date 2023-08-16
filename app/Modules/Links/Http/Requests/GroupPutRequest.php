@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\Users\Http\Requests;
+namespace App\Modules\Links\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class
+GroupPutRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +23,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['required', 'string', 'max:254'],
-            'email' => ['required', 'email', 'max:254', 'unique:users'],
-            'password' => ['required', 'string', 'max:254'],
-            'role_id' => ['integer', 'exists:roles,id']
+            'name'  => ['string', 'max:254'],
+            'description' => ['string', 'max:254'],
+            'count' => ['integer']
         ];
     }
 }
