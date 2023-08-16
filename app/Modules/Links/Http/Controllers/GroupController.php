@@ -65,7 +65,7 @@ class GroupController extends Controller
         $service->exists($id);
         $service->hasAccess(auth()->user(), $id);
 
-        return $service->show(auth()->user(), $id);
+        return $service->show($id);
     }
 
     /**
