@@ -201,8 +201,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/home/ilya/Projects/url_crypt/storage/framework/cache/data',
-        'lock_path' => '/home/ilya/Projects/url_crypt/storage/framework/cache/data',
+        'path' => '/var/www/yazu_links/storage/framework/cache/data',
+        'lock_path' => '/var/www/yazu_links/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -220,7 +220,7 @@
         array (
           0 => 
           array (
-            'host' => '127.0.0.1',
+            'host' => 'localhost',
             'port' => 11211,
             'weight' => 100,
           ),
@@ -293,7 +293,7 @@
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'postgres',
         'port' => '5432',
         'database' => 'url_crypt',
         'username' => 'postgres',
@@ -313,7 +313,7 @@
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'postgres',
         'port' => '5432',
         'database' => 'url_crypt',
         'username' => 'postgres',
@@ -328,7 +328,7 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'postgres',
         'port' => '5432',
         'database' => 'url_crypt',
         'username' => 'postgres',
@@ -341,7 +341,7 @@
     'migrations' => 'migrations',
     'redis' => 
     array (
-      'client' => 'phpredis',
+      'client' => 'predis',
       'options' => 
       array (
         'cluster' => 'redis',
@@ -350,7 +350,7 @@
       'default' => 
       array (
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'redis',
         'username' => NULL,
         'password' => NULL,
         'port' => '6379',
@@ -359,7 +359,7 @@
       'cache' => 
       array (
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'redis',
         'username' => NULL,
         'password' => NULL,
         'port' => '6379',
@@ -375,13 +375,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/home/ilya/Projects/url_crypt/storage/app',
+        'root' => '/var/www/yazu_links/storage/app',
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/home/ilya/Projects/url_crypt/storage/app/public',
+        'root' => '/var/www/yazu_links/storage/app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -401,7 +401,7 @@
     ),
     'links' => 
     array (
-      '/home/ilya/Projects/url_crypt/public/storage' => '/home/ilya/Projects/url_crypt/storage/app/public',
+      '/var/www/yazu_links/public/storage' => '/var/www/yazu_links/storage/app/public',
     ),
   ),
   'hashing' => 
@@ -440,14 +440,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
+        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
+        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -512,7 +512,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
+        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -579,13 +579,13 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/home/ilya/Projects/url_crypt/resources/views/vendor/mail',
+        0 => '/var/www/yazu_links/resources/views/vendor/mail',
       ),
     ),
   ),
   'modules' => 
   array (
-    'path' => '/home/ilya/Projects/url_crypt/app/Modules',
+    'path' => '/var/www/yazu_links/app/Modules',
     'base_namespace' => 'App\\Modules',
     'modules' => 
     array (
@@ -624,23 +624,9 @@
     'cache' => 
     array (
       'expiration_time' => 
-      DateInterval::__set_state(array(
-         'y' => 0,
-         'm' => 0,
-         'd' => 0,
-         'h' => 24,
-         'i' => 0,
-         's' => 0,
-         'f' => 0.0,
-         'weekday' => 0,
-         'weekday_behavior' => 0,
-         'first_last_day_of' => 0,
-         'invert' => 0,
-         'days' => false,
-         'special_type' => 0,
-         'special_amount' => 0,
-         'have_weekday_relative' => 0,
-         'have_special_relative' => 0,
+      \DateInterval::__set_state(array(
+         'from_string' => true,
+         'date_string' => '24 hours',
       )),
       'key' => 'spatie.permission.cache',
       'store' => 'default',
@@ -765,7 +751,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/home/ilya/Projects/url_crypt/storage/framework/sessions',
+    'files' => '/var/www/yazu_links/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -785,9 +771,9 @@
   array (
     'paths' => 
     array (
-      0 => '/home/ilya/Projects/url_crypt/resources/views',
+      0 => '/var/www/yazu_links/resources/views',
     ),
-    'compiled' => '/home/ilya/Projects/url_crypt/storage/framework/views',
+    'compiled' => '/var/www/yazu_links/storage/framework/views',
   ),
   'flare' => 
   array (
@@ -863,7 +849,7 @@
     array (
     ),
     'enable_runnable_solutions' => NULL,
-    'remote_sites_path' => '/home/ilya/Projects/url_crypt',
+    'remote_sites_path' => '/var/www/yazu_links',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
     'settings_file_path' => '',
