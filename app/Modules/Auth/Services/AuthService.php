@@ -191,8 +191,7 @@ class AuthService
         $token = base64_encode(encrypt($expiryDate . '_' . $user->id));
 
         $linkClass::create(['user_id' => $user->id, 'token' => $token, 'expiry_date' => $expiryDate]);
-
-        return route($route, ['token' => $token]);
+        return config('app.front_url') . route($route, ['token' => $token], false);
     }
 
     /**

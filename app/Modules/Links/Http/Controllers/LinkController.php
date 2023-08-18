@@ -57,8 +57,8 @@ class LinkController extends Controller
         $data['user_id'] = $user->id;
         $data['referral'] = $service->generateReferral();
 
-        if (!$data['group_id']) {
-            $data['group_id'] = $user->groups->where('name', 'like', '%Default')->first()->id;
+        if (!isset($data['group_id'])) {
+            $data['group_id'] = $user->groups->pluck('id')[0];
         } else $service->checkStorePermissions($user, $data);
 
         $service->groupCountIncrement($data['group_id']);
@@ -99,7 +99,7 @@ class LinkController extends Controller
         $linkService->exists($id);
         $linkService->hasAccess(auth()->user(), $id);
 
-        if ($data['group_id']) {
+        if (isset($data['group_id'])) {
             foreach ($data['group_id'] as $groupId) {
                 $groupService->hasAccess(auth()->user(), $groupId);
             }
@@ -131,7 +131,7 @@ class LinkController extends Controller
         $linkService->exists($id);
         $linkService->hasAccess(auth()->user(), $id);
 
-        if ($data['group_id']) {
+        if (isset($data['group_id'])) {
             foreach ($data['group_id'] as $groupId) {
                 $groupService->hasAccess(auth()->user(), $groupId);
             }

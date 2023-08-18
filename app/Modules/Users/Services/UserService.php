@@ -24,7 +24,7 @@ class UserService
     {
         return response()->json([
             'entity' => $user->attributesToArray(),
-            'role' => $user->roles->pluck('name'),
+            'roles' => $user->roles->pluck('name'),
             'groups' => $user->groups,
             'links' => $user->links
         ]);

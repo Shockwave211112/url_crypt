@@ -158,6 +158,13 @@ class CRUDRepository
         throw new DataBaseException(message: $this->modelName . ' not found.', status: 404);
     }
 
+    /**
+     * Возвращает преобразованный массив из полей $data в формате списка полей $fields
+     *
+     * @param array $data
+     * @param array $fields
+     * @return array
+     */
     private static function onlyFields(array $data = [], array $fields = []): array
     {
         if (!count($data) || !count($fields)) return [];

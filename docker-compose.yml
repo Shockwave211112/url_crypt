@@ -49,6 +49,7 @@ services:
             context: .
             dockerfile: docker/app/Dockerfile
         container_name: app_queue
+        restart: always
         volumes:
             - ./:/var/www/yazu_links
         depends_on:
@@ -58,10 +59,11 @@ services:
             - redis
         networks:
             - backend
-        command: [ "./docker/entrypoint.sh" ]
-#        command: php artisan queue:work
+#        command: [ "./docker/entrypoint.sh" ]
+        command: php artisan queue:work
     postgres:
         image: postgres:15.4-alpine
+        restart: always
         container_name: postgres
         environment:
             - POSTGRES_USER=postgres
@@ -70,8 +72,6 @@ services:
         volumes:
             - ./docker/postgres/data:/var/lib/postgresql/data
             - ./docker/postgres/storage:/var/lib/postgresql/storage
-        ports:
-            - "5432:5432"
         networks:
             - backend
     redis:
@@ -80,7 +80,5 @@ services:
         container_name: redis
         volumes:
             - ./docker/redis/data:/data
-        ports:
-            - "6379:6379"
         networks:
             - backend

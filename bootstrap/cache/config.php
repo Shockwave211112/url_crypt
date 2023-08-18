@@ -6,6 +6,7 @@
     'debug' => true,
     'url' => 'http://localhost',
     'asset_url' => NULL,
+    'front_url' => 'hide-url.ru',
     'timezone' => 'Europe/Moscow',
     'locale' => 'en',
     'fallback_locale' => 'en',
@@ -201,8 +202,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/var/www/yazu_links/storage/framework/cache/data',
-        'lock_path' => '/var/www/yazu_links/storage/framework/cache/data',
+        'path' => '/home/ilya/Projects/url_crypt/storage/framework/cache/data',
+        'lock_path' => '/home/ilya/Projects/url_crypt/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -375,13 +376,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/yazu_links/storage/app',
+        'root' => '/home/ilya/Projects/url_crypt/storage/app',
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/yazu_links/storage/app/public',
+        'root' => '/home/ilya/Projects/url_crypt/storage/app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -401,7 +402,7 @@
     ),
     'links' => 
     array (
-      '/var/www/yazu_links/public/storage' => '/var/www/yazu_links/storage/app/public',
+      '/home/ilya/Projects/url_crypt/public/storage' => '/home/ilya/Projects/url_crypt/storage/app/public',
     ),
   ),
   'hashing' => 
@@ -440,14 +441,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
+        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
+        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -512,7 +513,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/var/www/yazu_links/storage/logs/laravel.log',
+        'path' => '/home/ilya/Projects/url_crypt/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -579,13 +580,13 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/var/www/yazu_links/resources/views/vendor/mail',
+        0 => '/home/ilya/Projects/url_crypt/resources/views/vendor/mail',
       ),
     ),
   ),
   'modules' => 
   array (
-    'path' => '/var/www/yazu_links/app/Modules',
+    'path' => '/home/ilya/Projects/url_crypt/app/Modules',
     'base_namespace' => 'App\\Modules',
     'modules' => 
     array (
@@ -624,9 +625,23 @@
     'cache' => 
     array (
       'expiration_time' => 
-      \DateInterval::__set_state(array(
-         'from_string' => true,
-         'date_string' => '24 hours',
+      DateInterval::__set_state(array(
+         'y' => 0,
+         'm' => 0,
+         'd' => 0,
+         'h' => 24,
+         'i' => 0,
+         's' => 0,
+         'f' => 0.0,
+         'weekday' => 0,
+         'weekday_behavior' => 0,
+         'first_last_day_of' => 0,
+         'invert' => 0,
+         'days' => false,
+         'special_type' => 0,
+         'special_amount' => 0,
+         'have_weekday_relative' => 0,
+         'have_special_relative' => 0,
       )),
       'key' => 'spatie.permission.cache',
       'store' => 'default',
@@ -751,7 +766,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/var/www/yazu_links/storage/framework/sessions',
+    'files' => '/home/ilya/Projects/url_crypt/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -771,9 +786,9 @@
   array (
     'paths' => 
     array (
-      0 => '/var/www/yazu_links/resources/views',
+      0 => '/home/ilya/Projects/url_crypt/resources/views',
     ),
-    'compiled' => '/var/www/yazu_links/storage/framework/views',
+    'compiled' => '/home/ilya/Projects/url_crypt/storage/framework/views',
   ),
   'flare' => 
   array (
@@ -849,7 +864,7 @@
     array (
     ),
     'enable_runnable_solutions' => NULL,
-    'remote_sites_path' => '/var/www/yazu_links',
+    'remote_sites_path' => '/home/ilya/Projects/url_crypt',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
     'settings_file_path' => '',
