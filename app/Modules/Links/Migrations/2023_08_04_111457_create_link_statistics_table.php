@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('link_statistic', function (Blueprint $table) {
+        Schema::create('link_statistics', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
             $table->foreignId('link_id')->references('id')->on('links')->onDelete('cascade');

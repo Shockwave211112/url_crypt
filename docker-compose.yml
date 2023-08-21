@@ -74,6 +74,8 @@ services:
             - ./docker/postgres/storage:/var/lib/postgresql/storage
         networks:
             - backend
+        ports:
+            - "5432:5432"
     redis:
         restart: always
         image: redis:7.0.12-alpine
@@ -82,3 +84,5 @@ services:
             - ./docker/redis/data:/data
         networks:
             - backend
+        ports:
+            - "6379:6379"

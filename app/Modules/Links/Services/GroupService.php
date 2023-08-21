@@ -8,6 +8,8 @@ use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Core\Traits\CRUDTrait;
 use App\Modules\Links\Models\Group;
 use App\Modules\Users\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class GroupService
 {
@@ -18,6 +20,22 @@ class GroupService
         $this->repository = new CRUDRepository(new Group());
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function index()
+    {
+        $user = auth()->user();
+
+        if ($user->hasExactRoles(User::ADMIN)) return $this->repository->index();
+        else {
+            return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
+                ->remember($user->id . '-Link-page-' . request('page', default: 1), now()->addMinutes(180),
+                    function () use ($user) {
+                        return $user->groups->forPage(request('page', default: 1), 10);
+                    });
+        }
+    }
     /**
      * Проверка существования группы
      *

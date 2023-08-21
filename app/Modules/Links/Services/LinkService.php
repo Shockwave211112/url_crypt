@@ -9,7 +9,10 @@ use App\Modules\Core\Traits\CRUDTrait;
 use App\Modules\Links\Jobs\LinkHit;
 use App\Modules\Links\Models\Group;
 use App\Modules\Links\Models\Link;
+use App\Modules\Links\Models\LinkStatistic;
 use App\Modules\Users\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class LinkService
@@ -19,6 +22,51 @@ class LinkService
     public function __construct()
     {
         $this->repository = new CRUDRepository(new Link());
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function index()
+    {
+        $user = auth()->user();
+
+        if ($user->hasExactRoles(User::ADMIN)) return $this->repository->index();
+        else {
+            return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
+                ->remember($user->id . '-Link-page-' . request('page', default: 1), now()->addMinutes(180),
+                    function () use ($user) {
+                        return $user->links->forPage(request('page', default: 1), 10);
+                    });
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @throws DataBaseException
+     */
+    public function show(int $id)
+    {
+        $record = Cache::tags('Link')
+            ->remember('Link:' . $id, now()->addMinutes(180),
+                function () use ($id) {
+                    return Link::find($id);
+                });
+
+        if ($record) {
+            $linkStat = Cache::tags('LinkStatistic')
+                ->remember('LinkStat:' . $id, now()->addMinutes(180),
+                    function () use ($id) {
+                        return LinkStatistic::where('link_id', $id)->select('date', 'hits')->get();
+                    });
+
+            return response()->json([
+                'entity' => $record,
+                'stats' => $linkStat
+            ]);
+        }
+        throw new DataBaseException(message: 'Link not found.', status: 404);
     }
 
     /**
@@ -52,16 +100,18 @@ class LinkService
      */
     public function checkStorePermissions(User $user, array $data)
     {
-        if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray())) {
-            throw new AuthException('You dont have permissions to add link in this group.', 403);
-        }
+        if (!$user->hasExactRoles(User::ADMIN)) {
+            if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray())) {
+                throw new AuthException('You dont have permissions to add link in this group.', 403);
+            }
 
-        if ($user->groups->sum('count') >= 500) {
-            throw new DataBaseException('Maximum of links count reached.', 403);
-        }
+            if ($user->groups->sum('count') >= 500) {
+                throw new DataBaseException('Maximum of links count reached.', 403);
+            }
 
-        if ($user->groups->where('id', $data['group_id'])->first()->count >= 100) {
-            throw new DataBaseException('Please select other group. Max count of links reached.', 403);
+            if ($user->groups->where('id', $data['group_id'])->first()->count >= 100) {
+                throw new DataBaseException('Please select other group. Max count of links reached.', 403);
+            }
         }
     }
 

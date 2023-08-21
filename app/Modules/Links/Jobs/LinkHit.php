@@ -33,7 +33,9 @@ class LinkHit implements ShouldQueue
     public function handle(): void
     {
         $nowDate = now()->toDateString();
+
         $linkStat = LinkStatistic::where('link_id', $this->link->id)->where('date', $nowDate)->first();
+
         if (!$linkStat) {
             $linkStat = LinkStatistic::create([
                 'link_id' => $this->link->id,

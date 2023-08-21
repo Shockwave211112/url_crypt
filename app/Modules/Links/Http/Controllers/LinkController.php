@@ -59,7 +59,8 @@ class LinkController extends Controller
 
         if (!isset($data['group_id'])) {
             $data['group_id'] = $user->groups->pluck('id')[0];
-        } else $service->checkStorePermissions($user, $data);
+        }
+        $service->checkStorePermissions($user, $data);
 
         $service->groupCountIncrement($data['group_id']);
 
