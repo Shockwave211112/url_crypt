@@ -5,8 +5,9 @@ namespace App\Modules\Users\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Core\Exceptions\DataBaseException;
 use App\Modules\Core\Traits\PermissionsTrait;
+use App\Modules\Users\Http\Requests\PatchRequest;
 use App\Modules\Users\Http\Requests\StoreRequest;
-use App\Modules\Users\Http\Requests\UpdateRequest;
+use App\Modules\Users\Http\Requests\PutRequest;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -50,7 +51,7 @@ class UserController extends Controller
     public function store(StoreRequest $request, UserService $service)
     {
         $data = $request->validated();
-        if (!$data['role_id']) {
+        if (!isset($data['role_id'])) {
             $data['role_id'] = 2;
         }
 
@@ -82,15 +83,15 @@ class UserController extends Controller
     /**
      * @PermissionGuard user--put
      * @param int $id
-     * @param UpdateRequest $request
+     * @param PutRequest $request
      * @param UserService $service
      * @return JsonResponse
      */
-    public function put(int $id, UpdateRequest $request, UserService $service)
+    public function put(int $id, PutRequest $request, UserService $service)
     {
         $data = $request->validated();
 
-        if ($data['role_id']) {
+        if (isset($data['role_id'])) {
             $relations = [
                 'roles' => $data['role_id']
             ];
@@ -103,15 +104,15 @@ class UserController extends Controller
     /**
      * @PermissionGuard user--patch
      * @param int $id
-     * @param UpdateRequest $request
+     * @param PatchRequest $request
      * @param UserService $service
      * @return JsonResponse
      */
-    public function patch(int $id, UpdateRequest $request, UserService $service)
+    public function patch(int $id, PatchRequest $request, UserService $service)
     {
         $data = $request->validated();
 
-        if ($data['role_id']) {
+        if (isset($data['role_id'])) {
             $relations = [
                 'roles' => $data['role_id']
             ];

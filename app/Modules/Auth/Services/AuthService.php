@@ -85,15 +85,16 @@ class AuthService
     {
         $confirmLink = ConfirmLinks::where('token', $data['token'])->first();
         if (!$confirmLink) {
-            throw new EmailException(message: 'Link expired.', status: '404');
+            throw new EmailException(message: 'Link expired.', status: '403');
         }
 
         $decryptedToken = decrypt(base64_decode($data['token']));
         $splittedToken = explode('_', $decryptedToken);
 
         $expiryDate = $splittedToken[0];
+
         if ($expiryDate < now()) {
-            throw new EmailException(message: 'Link expired.', status: '404');
+            throw new EmailException(message: 'Link expired.', status: '403');
         }
 
         $userId = $splittedToken[1];
@@ -141,7 +142,7 @@ class AuthService
     {
         $restoreLink = RestoreLinks::where('token', $data['token'])->first();
         if (!$restoreLink) {
-            throw new EmailException(message: 'Link expired.', status: '404');
+            throw new EmailException(message: 'Link expired.', status: '403');
         }
 
         $decryptedToken = decrypt(base64_decode($data['token']));
@@ -149,7 +150,7 @@ class AuthService
 
         $expiryDate = $splittedToken[0];
         if ($expiryDate < now()) {
-            throw new EmailException(message: 'Link expired.', status: '404');
+            throw new EmailException(message: 'Link expired.', status: '403');
         }
 
         $userId = $splittedToken[1];
