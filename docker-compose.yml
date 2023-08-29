@@ -73,8 +73,8 @@ services:
             - APP_FRONT_URL=hide-url.ru
             - DB_HOST=postgres
             - REDIS_HOST=redis
-#        command: [ "./docker/entrypoint.sh" ]
-        command: php artisan queue:work
+        command: [ "./docker/entrypoint.sh" ]
+#        command: php artisan queue:work
     postgres:
         image: postgres:15.4-alpine
         restart: always
