@@ -1,0 +1,104 @@
+version: '3'
+
+networks:
+    backend:
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        restart: always
+        container_name: nginx
+        volumes:
+            - ./:/var/www/yazu_links
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - "8000:80"
+        networks:
+            - backend
+    app:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        container_name: yazu_app
+        volumes:
+            - ./:/var/www/yazu_links
+        links:
+            - postgres
+            - redis
+        depends_on:
+            - nginx
+            - postgres
+            - redis
+            - php-queue
+        environment:
+            - DB_CONNECTION=pgsql
+            - DB_DATABASE=url_crypt
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=123
+            - CACHE_DRIVER=redis
+            - QUEUE_CONNECTION=redis
+            - REDIS_CLIENT=predis
+            - REDIS_PASSWORD=null
+            - REDIS_PORT=6379
+            - APP_FRONT_URL=hide-url.ru
+            - DB_HOST=postgres
+            - REDIS_HOST=redis
+            - FACEBOOK_REDIRECT_URL=http://localhost:8000/auth/facebook/callback
+            - GOOGLE_REDIRECT_URL=http://localhost:8000/auth/google/callback
+        networks:
+            - backend
+    php-queue:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        container_name: app_queue
+        restart: always
+        volumes:
+            - ./:/var/www/yazu_links
+        links:
+            - postgres
+            - redis
+        networks:
+            - backend
+        environment:
+            - DB_CONNECTION=pgsql
+            - DB_DATABASE=url_crypt
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=123
+            - CACHE_DRIVER=redis
+            - QUEUE_CONNECTION=redis
+            - REDIS_CLIENT=predis
+            - REDIS_PASSWORD=null
+            - REDIS_PORT=6379
+            - APP_FRONT_URL=hide-url.ru
+            - DB_HOST=postgres
+            - REDIS_HOST=redis
+        command: [ "./docker/entrypoint.sh" ]
+#        command: php artisan queue:work
+    postgres:
+        image: postgres:15.4-alpine
+        restart: always
+        container_name: postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=123
+            - POSTGRES_DB=url_crypt
+        volumes:
+            - ./docker/postgres/data:/var/lib/postgresql/data
+            - ./docker/postgres/storage:/var/lib/postgresql/storage
+        networks:
+            - backend
+        ports:
+            - "5432:5432"
+    redis:
+        restart: always
+        image: redis:7.0.12-alpine
+        container_name: redis
+        volumes:
+            - ./docker/redis/data:/data
+        networks:
+            - backend
+        ports:
+            - "6379:6379"
