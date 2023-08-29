@@ -12,7 +12,7 @@ use Tests\TestCase;
 class RegistrationTest extends TestCase
 {
     protected $method = Request::METHOD_POST;
-    protected string $uri = '/registration';
+    protected string $uri = '/auth/registration';
 
     public function testShouldResponseWithHttpOk()
     {

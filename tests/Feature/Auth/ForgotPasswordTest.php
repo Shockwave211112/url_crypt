@@ -12,7 +12,7 @@ use Tests\TestCase;
 class ForgotPasswordTest extends TestCase
 {
     protected $method = Request::METHOD_POST;
-    protected string $uri = '/forgot-password';
+    protected string $uri = '/auth/forgot-password';
 
     public function testShouldResponseWithHttpOk()
     {

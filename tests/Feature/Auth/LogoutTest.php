@@ -9,7 +9,7 @@ use Tests\TestCase;
 class LogoutTest extends TestCase
 {
     protected $method = Request::METHOD_GET;
-    protected string $uri = '/logout';
+    protected string $uri = '/auth/logout';
 
     public function testShouldResponseWithHttpOk()
     {

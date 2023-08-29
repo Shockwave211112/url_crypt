@@ -36,11 +36,14 @@ class AuthController extends Controller
     }
 
     /**
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
         auth()->user()->tokens()->delete();
+        return response()->json([
+            'message' => 'Successful logout.',
+        ]);
     }
 
     /**

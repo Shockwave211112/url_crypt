@@ -5,22 +5,27 @@ use App\Modules\Auth\Http\Controllers\PermissionsController;
 use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/auth', [AuthController::class, 'login']);
+Route::group(['prefix' => 'auth'],
+    function () {
+        Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/auth/{provider}/redirect', [AuthController::class, 'oauth']);
-Route::get('/auth/{provider}/callback', [AuthController::class, 'callback']);
+        Route::get('/{provider}/redirect', [AuthController::class, 'oauth']);
+        Route::get('/{provider}/callback', [AuthController::class, 'callback']);
 
-Route::post('/registration', [AuthController::class, 'registration']);
+        Route::post('/registration', [AuthController::class, 'registration']);
+
+        Route::get('/reset-password', [AuthController::class, 'getResetPassword'])->name('password.reset');
+        Route::post('/change-password', [AuthController::class, 'resetPassword']);
+        Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+
+        Route::get('/logout', [AuthController::class, 'logout']);
+    });
 
 Route::get('/email/verify', [AuthController::class, 'emailVerify'])->name('email.verify');
 
-Route::get('/reset-password', [AuthController::class, 'getResetPassword'])->name('password.reset');
-Route::post('/change-password', [AuthController::class, 'resetPassword']);
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/email/resend', [AuthController::class, 'resend']);
-    Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'permissions', 'middleware' => 'role:' . User::ADMIN], function() {
         Route::get('/', [PermissionsController::class, 'index']);

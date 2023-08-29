@@ -10,7 +10,7 @@ use Tests\TestCase;
 class LoginTest extends TestCase
 {
     protected $method = Request::METHOD_POST;
-    protected string $uri = '/auth';
+    protected string $uri = '/auth/login';
 
     public function testShouldResponseWithHttpOk()
     {

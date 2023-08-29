@@ -44,7 +44,7 @@ abstract class TestCase extends BaseTestCase
                 'password' => '11111111',
             ];
 
-            $authToken = $this->post('/auth', $userData)->assertOk()->json('token');
+            $authToken = $this->post('/auth/login', $userData)->assertOk()->json('token');
 
             $authHeader = array_merge(['authorization' => 'Bearer '. $authToken]);
         } else $authHeader = [];

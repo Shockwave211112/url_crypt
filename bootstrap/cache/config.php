@@ -2,16 +2,16 @@
   'app' => 
   array (
     'name' => 'Laravel',
-    'env' => 'local',
-    'debug' => true,
+    'env' => 'production',
+    'debug' => false,
     'url' => 'http://localhost',
     'asset_url' => NULL,
     'front_url' => 'hide-url.ru',
-    'timezone' => 'Europe/Moscow',
+    'timezone' => 'UTC',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:FAbEq04nrLKwReAiDD3wvAJ5clA+fyTPJNeomCDvWoo=',
+    'key' => NULL,
     'cipher' => 'AES-256-CBC',
     'maintenance' => 
     array (
@@ -136,20 +136,20 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'log',
+    'default' => 'null',
     'connections' => 
     array (
       'pusher' => 
       array (
         'driver' => 'pusher',
-        'key' => '',
-        'secret' => '',
-        'app_id' => '',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
         'options' => 
         array (
-          'cluster' => 'mt1',
+          'cluster' => NULL,
           'host' => 'api-mt1.pusher.com',
-          'port' => '443',
+          'port' => 443,
           'scheme' => 'https',
           'encrypted' => true,
           'useTLS' => true,
@@ -221,7 +221,7 @@
         array (
           0 => 
           array (
-            'host' => 'localhost',
+            'host' => '127.0.0.1',
             'port' => 11211,
             'weight' => 100,
           ),
@@ -236,8 +236,8 @@
       'dynamodb' => 
       array (
         'driver' => 'dynamodb',
-        'key' => '',
-        'secret' => '',
+        'key' => NULL,
+        'secret' => NULL,
         'region' => 'us-east-1',
         'table' => 'cache',
         'endpoint' => NULL,
@@ -295,7 +295,7 @@
         'driver' => 'mysql',
         'url' => NULL,
         'host' => 'postgres',
-        'port' => '5432',
+        'port' => '3306',
         'database' => 'url_crypt',
         'username' => 'postgres',
         'password' => '123',
@@ -330,7 +330,7 @@
         'driver' => 'sqlsrv',
         'url' => NULL,
         'host' => 'postgres',
-        'port' => '5432',
+        'port' => '1433',
         'database' => 'url_crypt',
         'username' => 'postgres',
         'password' => '123',
@@ -383,17 +383,17 @@
       array (
         'driver' => 'local',
         'root' => '/var/www/yazu_links/storage/app/public',
-        'url' => 'http://localhost/storage',
+        'url' => '/storage',
         'visibility' => 'public',
         'throw' => false,
       ),
       's3' => 
       array (
         'driver' => 's3',
-        'key' => '',
-        'secret' => '',
-        'region' => 'us-east-1',
-        'bucket' => '',
+        'key' => NULL,
+        'secret' => NULL,
+        'region' => NULL,
+        'bucket' => NULL,
         'url' => NULL,
         'endpoint' => NULL,
         'use_path_style_endpoint' => false,
@@ -424,7 +424,7 @@
     'default' => 'stack',
     'deprecations' => 
     array (
-      'channel' => NULL,
+      'channel' => 'null',
       'trace' => false,
     ),
     'channels' => 
@@ -459,7 +459,7 @@
         'url' => NULL,
         'username' => 'Laravel Log',
         'emoji' => ':boom:',
-        'level' => 'debug',
+        'level' => 'critical',
         'replace_placeholders' => true,
       ),
       'papertrail' => 
@@ -526,11 +526,11 @@
       array (
         'transport' => 'smtp',
         'url' => NULL,
-        'host' => 'app.debugmail.io',
-        'port' => '9025',
+        'host' => 'smtp.mailgun.org',
+        'port' => 587,
         'encryption' => 'tls',
-        'username' => '6b3126f1-a36e-4f43-9f1e-40f3c358c5b1',
-        'password' => '897f8ee9-d118-4384-ae8a-ebfad7bca00b',
+        'username' => NULL,
+        'password' => NULL,
         'timeout' => NULL,
         'local_domain' => NULL,
       ),
@@ -572,8 +572,8 @@
     ),
     'from' => 
     array (
-      'address' => 'hide_url@notify.com',
-      'name' => 'Rest',
+      'address' => 'hello@example.com',
+      'name' => 'Example',
     ),
     'markdown' => 
     array (
@@ -662,8 +662,8 @@
       'sqs' => 
       array (
         'driver' => 'sqs',
-        'key' => '',
-        'secret' => '',
+        'key' => NULL,
+        'secret' => NULL,
         'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
         'queue' => 'default',
         'suffix' => NULL,
@@ -708,6 +708,7 @@
       0 => 'web',
     ),
     'expiration' => 1440,
+    'token_prefix' => 'laravel_sanctum_',
     'middleware' => 
     array (
       'verify_csrf_token' => 'App\\Http\\Middleware\\VerifyCsrfToken',
@@ -729,27 +730,27 @@
     ),
     'ses' => 
     array (
-      'key' => '',
-      'secret' => '',
+      'key' => NULL,
+      'secret' => NULL,
       'region' => 'us-east-1',
     ),
     'google' => 
     array (
-      'client_id' => '439673656943-vrrc16gfiu2kf894pv3ddhiaqt675ept.apps.googleusercontent.com',
-      'client_secret' => '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',
-      'redirect' => 'http://localhost:8000/auth/google/callback',
+      'client_id' => NULL,
+      'client_secret' => NULL,
+      'redirect' => NULL,
     ),
     'facebook' => 
     array (
-      'client_id' => '600398768673406',
-      'client_secret' => 'e5b5aa068ef40da48bf372adfcaccf3e',
-      'redirect' => 'http://localhost:8000/auth/facebook/callback',
+      'client_id' => NULL,
+      'client_secret' => NULL,
+      'redirect' => NULL,
     ),
   ),
   'session' => 
   array (
     'driver' => 'file',
-    'lifetime' => '120',
+    'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
     'files' => '/var/www/yazu_links/storage/framework/sessions',
@@ -845,6 +846,7 @@
       16 => 'Spatie\\LaravelIgnition\\Solutions\\SolutionProviders\\UndefinedViewVariableSolutionProvider',
       17 => 'Spatie\\LaravelIgnition\\Solutions\\SolutionProviders\\GenericLaravelExceptionSolutionProvider',
       18 => 'Spatie\\LaravelIgnition\\Solutions\\SolutionProviders\\OpenAiSolutionProvider',
+      19 => 'Spatie\\LaravelIgnition\\Solutions\\SolutionProviders\\SailNetworkSolutionProvider',
     ),
     'ignored_solution_providers' => 
     array (

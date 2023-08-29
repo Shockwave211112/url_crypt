@@ -21,7 +21,7 @@ class EmailVerifyTest extends TestCase
 
         $this->defaultTest(
             Request::METHOD_POST,
-            '/registration',
+            '/auth/registration',
             data: [
                 'email' => 'test@test.com',
                 'name' => 'Test',
@@ -50,7 +50,7 @@ class EmailVerifyTest extends TestCase
 
         $this->defaultTest(
             Request::METHOD_POST,
-            '/registration',
+            '/auth/registration',
             data: [
                 'email' => 'test@test.com',
                 'name' => 'Test',

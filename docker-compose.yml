@@ -31,6 +31,7 @@ services:
             - nginx
             - postgres
             - redis
+            - php-queue
         environment:
             - DB_CONNECTION=pgsql
             - DB_DATABASE=url_crypt
@@ -54,8 +55,6 @@ services:
         restart: always
         volumes:
             - ./:/var/www/yazu_links
-        depends_on:
-            - app
         links:
             - postgres
             - redis

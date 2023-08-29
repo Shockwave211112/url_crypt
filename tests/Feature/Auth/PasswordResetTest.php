@@ -13,7 +13,7 @@ use Tests\TestCase;
 class PasswordResetTest extends TestCase
 {
     protected $method = Request::METHOD_POST;
-    protected string $uri = '/change-password';
+    protected string $uri = '/auth/change-password';
 
     public function testShouldResponseWithHttpOk()
     {
@@ -23,7 +23,7 @@ class PasswordResetTest extends TestCase
 
         $this->defaultTest(
             $this->method,
-            '/forgot-password',
+            '/auth/forgot-password',
             data: [
                 'email' => 'test@test.com',
             ],
@@ -45,7 +45,7 @@ class PasswordResetTest extends TestCase
 
         $this->defaultTest(
             $this->method,
-            '/auth',
+            '/auth/login',
             data: [
                 'email' => 'test@test.com',
                 'password' => '22222222'
@@ -63,7 +63,7 @@ class PasswordResetTest extends TestCase
 
         $this->defaultTest(
             $this->method,
-            '/forgot-password',
+            '/auth/forgot-password',
             data: [
                 'email' => 'test@test.com',
             ],
