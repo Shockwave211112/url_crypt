@@ -15,16 +15,16 @@ class UserSeeder extends Seeder
     {
         $admin = User::factory()->create([
             'name' => 'admin',
-            'email' => 'admin@admin.ru',
-            'password' => '11111111'
+            'email' => config('constants.env.admin_email'),
+            'password' => config('constants.env.admin_pwd'),
         ]);
 
         $admin->assignRole(User::ADMIN);
 
         $baseUser = User::factory()->create([
             'name' => 'user',
-            'email' => 'basic@user.ru',
-            'password' => '11111111'
+            'email' => config('constants.env.basic_user_email'),
+            'password' => config('constants.env.basic_user_pwd'),
         ]);
 
         $baseUser->assignRole(User::BASIC_USER);

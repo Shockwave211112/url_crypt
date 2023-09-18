@@ -57,12 +57,12 @@ class LinkController extends Controller
         $data['user_id'] = $user->id;
         $data['referral'] = $service->generateReferral();
 
-        if (!isset($data['group_id'])) {
-            $data['group_id'] = $user->groups->pluck('id')[0];
-        }
+        if (!isset($data['group_id'])) $data['group_id'] = $user->groups->pluck('id')[0];
         $service->checkStorePermissions($user, $data);
 
-        $service->groupCountIncrement($data['group_id']);
+        foreach ($data['group_id'] as $group) {
+            $service->groupCountIncrement($group);
+        }
 
         return $service->store($data);
     }

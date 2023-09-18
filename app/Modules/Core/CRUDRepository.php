@@ -23,9 +23,7 @@ class CRUDRepository
     {
         return Cache::tags([$this->modelName, 'pagination'])
             ->remember($this->modelName . '-page-' . request('page', default: 1), now()->addMinutes(180),
-                function () {
-                    return $this->model::paginate(10);
-                });
+                fn () => $this->model::paginate(10));
     }
 
     /**
@@ -61,9 +59,7 @@ class CRUDRepository
     {
         $record = Cache::tags($this->modelName)
             ->remember($this->modelName . ':' . $id, now()->addMinutes(180),
-                function () use ($id) {
-                    return $this->model::find($id);
-                });
+                fn () => $this->model::find($id));
 
         if ($record) {
             return response()->json([

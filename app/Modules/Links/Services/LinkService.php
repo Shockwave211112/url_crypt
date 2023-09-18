@@ -35,9 +35,7 @@ class LinkService
         else {
             return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
                 ->remember($user->id . '-Link-page-' . request('page', default: 1), now()->addMinutes(180),
-                    function () use ($user) {
-                        return $user->links->forPage(request('page', default: 1), 10);
-                    });
+                    fn () => $user->links->forPage(request('page', default: 1), 10));
         }
     }
 
@@ -50,16 +48,12 @@ class LinkService
     {
         $record = Cache::tags('Link')
             ->remember('Link:' . $id, now()->addMinutes(180),
-                function () use ($id) {
-                    return Link::find($id);
-                });
+                fn () => Link::find($id));
 
         if ($record) {
             $linkStat = Cache::tags('LinkStatistic')
                 ->remember('LinkStat:' . $id, now()->addMinutes(180),
-                    function () use ($id) {
-                        return LinkStatistic::where('link_id', $id)->select('date', 'hits')->get();
-                    });
+                    fn () => LinkStatistic::where('link_id', $id)->select('date', 'hits')->get());
 
             return response()->json([
                 'entity' => $record,
@@ -78,11 +72,11 @@ class LinkService
      */
     public function referral(string $referral)
     {
-        $link = Link::where('referral', $referral)->first();
+        $link = Cache::tags('Link')
+            ->remember('Link:' . $referral, now()->addMinutes(180),
+                fn () => Link::where('referral', $referral)->first());
 
-        if (!$link) {
-            throw new DataBaseException('Link not found.', 404);
-        }
+        if (!$link) throw new DataBaseException('Link not found.', 404);
 
         dispatch(new LinkHit($link));
 
@@ -101,17 +95,17 @@ class LinkService
     public function checkStorePermissions(User $user, array $data)
     {
         if (!$user->hasExactRoles(User::ADMIN)) {
-            if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray())) {
+            if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray()))
                 throw new AuthException('You dont have permissions to add link in this group.', 403);
-            }
 
-            if ($user->groups->sum('count') >= 500) {
+            if ($user->links->sum('count') >= config('constants.env.links_per_user'))
                 throw new DataBaseException('Maximum of links count reached.', 403);
-            }
 
-            if ($user->groups->where('id', $data['group_id'])->first()->count >= 100) {
+            if ($user->groups->sum('count') >= config('constants.env.groups_per_user'))
+                throw new DataBaseException('Maximum of groups count reached.', 403);
+
+            if ($user->groups->where('id', $data['group_id'])->first()->count >= config('constants.env.links_per_group'))
                 throw new DataBaseException('Please select other group. Max count of links reached.', 403);
-            }
         }
     }
 
@@ -162,7 +156,7 @@ class LinkService
     }
 
     /**
-     * Увеличить счётчик у группы с указанным ID
+     * Увеличить счётчик у групп с указанным ID
      *
      * @param int $group_id
      * @return void

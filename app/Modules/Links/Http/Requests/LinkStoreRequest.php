@@ -2,6 +2,7 @@
 
 namespace App\Modules\Links\Http\Requests;
 
+use App\Modules\Core\Rules\isNumericArray;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LinkStoreRequest extends FormRequest
@@ -25,7 +26,7 @@ class LinkStoreRequest extends FormRequest
             'name'  => ['required', 'string', 'max:254'],
             'description' => ['required', 'string', 'max:254'],
             'origin' => ['required', 'string', 'max:254'],
-            'group_id' => ['integer', 'exists:groups,id']
+            'group_id' => [new isNumericArray(), 'exists:groups,id']
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Modules\Users\Http\Requests\PutRequest;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Services\UserService;
 use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -51,11 +52,11 @@ class UserController extends Controller
     public function store(StoreRequest $request, UserService $service)
     {
         $data = $request->validated();
-        if (!isset($data['role_id'])) {
-            $data['role_id'] = 2;
-        }
 
-        return $service->store($data);
+        $response = $service->store($data);
+        if ($response) User::where('id', $response->getData()->entity->id)->first()->assignRole(User::BASIC_USER);
+
+        return $response;
     }
 
     /**
