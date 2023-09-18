@@ -32,21 +32,6 @@ services:
             - postgres
             - redis
             - php-queue
-        environment:
-            - DB_CONNECTION=pgsql
-            - DB_DATABASE=url_crypt
-            - DB_USERNAME=postgres
-            - DB_PASSWORD=123
-            - CACHE_DRIVER=redis
-            - QUEUE_CONNECTION=redis
-            - REDIS_CLIENT=predis
-            - REDIS_PASSWORD=null
-            - REDIS_PORT=6379
-            - APP_FRONT_URL=hide-url.ru
-            - DB_HOST=postgres
-            - REDIS_HOST=redis
-            - FACEBOOK_REDIRECT_URL=http://localhost:8000/auth/facebook/callback
-            - GOOGLE_REDIRECT_URL=http://localhost:8000/auth/google/callback
         networks:
             - backend
     php-queue:
@@ -62,19 +47,6 @@ services:
             - redis
         networks:
             - backend
-        environment:
-            - DB_CONNECTION=pgsql
-            - DB_DATABASE=url_crypt
-            - DB_USERNAME=postgres
-            - DB_PASSWORD=123
-            - CACHE_DRIVER=redis
-            - QUEUE_CONNECTION=redis
-            - REDIS_CLIENT=predis
-            - REDIS_PASSWORD=null
-            - REDIS_PORT=6379
-            - APP_FRONT_URL=hide-url.ru
-            - DB_HOST=postgres
-            - REDIS_HOST=redis
         command: [ "./docker/entrypoint.sh" ]
 #        command: php artisan queue:work
     postgres:
