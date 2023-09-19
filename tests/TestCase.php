@@ -22,6 +22,17 @@ abstract class TestCase extends BaseTestCase
         $this->artisan('db:seed');
     }
 
+    /**Обёртка для тестирования.
+     *
+     * @param $method -какой метод использовать
+     * @param string $uri -какой путь использовать
+     * @param int $status -какой ожидать статус у ответа. Дефолтно = 200
+     * @param array $data -массив данных, который нужно передать [Request body]
+     * @param bool $needAuth -нужна ли авторизация для действия. Дефолтно = да
+     * @param string $role -какую роль использовать при авторизации. Дефолтно - админ
+     * @param User|null $user -если нужно выполнить действие от лица конкретного пользователя. Дефолтно = нет
+     * @return \Illuminate\Testing\TestResponse
+     */
     public function defaultTest(
         $method,
         string $uri,

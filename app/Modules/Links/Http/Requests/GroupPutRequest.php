@@ -23,9 +23,9 @@ GroupPutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['string', 'max:254'],
-            'description' => ['string', 'max:254'],
-            'count' => ['integer']
+            'name'  => ['required', 'string', 'max:254'],
+            'description' => ['required', 'string', 'max:254'],
+            'count' => ['required', 'integer']
         ];
     }
 }

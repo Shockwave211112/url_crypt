@@ -28,13 +28,9 @@ class GroupService
         $user = auth()->user();
 
         if ($user->hasExactRoles(User::ADMIN)) return $this->repository->index();
-        else {
-            return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
+        else return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
                 ->remember($user->id . '-Link-page-' . request('page', default: 1), now()->addMinutes(180),
-                    function () use ($user) {
-                        return $user->groups->forPage(request('page', default: 1), 10);
-                    });
-        }
+                    fn () => $user->groups->forPage(request('page', default: 1), 10));
     }
     /**
      * Проверка существования группы
@@ -47,9 +43,7 @@ class GroupService
     {
         $group = Group::find($id);
 
-        if (!$group) {
-            throw new DataBaseException('Link not found.', 404);
-        }
+        if (!$group) throw new DataBaseException('Group not found.', 404);
     }
 
     /**
@@ -62,8 +56,7 @@ class GroupService
      */
     public function hasAccess(User $user, int $id)
     {
-        if (!in_array($id, $user->groups->pluck('id')->toArray())) {
+        if (!in_array($id, $user->groups->pluck('id')->toArray()))
             throw new AuthException('You dont have permissions to interact with this group.', 403);
-        }
     }
 }

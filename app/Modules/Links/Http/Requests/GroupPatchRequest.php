@@ -25,6 +25,7 @@ GroupPatchRequest extends FormRequest
         return [
             'name'  => ['string', 'max:254'],
             'description' => ['string', 'max:254'],
+            'count' => ['integer']
         ];
     }
 }

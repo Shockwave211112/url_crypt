@@ -33,8 +33,7 @@ class PatchUsersTest extends TestCase
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $user->id,
-            Response::HTTP_OK,
+            $this->uri . $user->id
         );
     }
 

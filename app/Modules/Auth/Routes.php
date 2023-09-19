@@ -18,7 +18,9 @@ Route::group(['prefix' => 'auth'],
         Route::post('/change-password', [AuthController::class, 'resetPassword']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
-        Route::get('/logout', [AuthController::class, 'logout']);
+        Route::group(['middleware' => 'auth:sanctum'], function () {
+            Route::get('/logout', [AuthController::class, 'logout']);
+        });
     });
 
 Route::get('/email/verify', [AuthController::class, 'emailVerify'])->name('email.verify');

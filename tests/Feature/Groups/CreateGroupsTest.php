@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Feature\Users;
+namespace Tests\Feature\Groups;
 
 use App\Modules\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class CreateUsersTest extends TestCase
+class CreateGroupsTest extends TestCase
 {
     protected $method = Request::METHOD_POST;
-    protected string $uri = '/user';
+    protected string $uri = '/groups';
 
     public function testShouldResponseWithHttpOk()
     {
@@ -18,13 +18,12 @@ class CreateUsersTest extends TestCase
             $this->method,
             $this->uri,
             data: [
-                'email' => 'test@test.com',
-                'name' => 'Test',
-                'password' => '11111111'
+                'name' => 'Test Group',
+                'description' => '???text???'
             ]
         );
 
-        $this->assertDatabaseHas('users', ['email' => 'test@test.com']);
+        $this->assertDatabaseHas('groups', ['name' => 'Test Group']);
     }
 
     public function testShouldResponseWithHttpUnprocessableIfNoParams()
@@ -43,9 +42,8 @@ class CreateUsersTest extends TestCase
             $this->uri,
             Response::HTTP_UNPROCESSABLE_ENTITY,
             data: [
-                'email' => 'fsafas.com',
-                'name' => 1,
-                'password' => '222'
+                'name' => ['f'],
+                'description' => 1
             ]
         );
     }
@@ -60,13 +58,37 @@ class CreateUsersTest extends TestCase
         );
     }
 
-    public function testShouldResponseWithHttpForbiddenIfNotAdmin()
+    public function testShouldResponseWithHttpOkIfNotAdmin()
     {
+        $user = User::factory()->create(['email' => 'test@test.com']);
+        $user->givePermissionTo('group--create');
+
+        $this->defaultTest(
+            $this->method,
+            $this->uri,
+            data: [
+                'name' => 'Test Group',
+                'description' => '???text???'
+            ],
+            user: $user
+        );
+
+        $this->assertDatabaseHas('groups', ['name' => 'Test Group']);
+    }
+
+    public function testShouldResponseWithHttpForbiddenIfDontHavePermissions()
+    {
+        $user = User::factory()->create(['email' => 'test@test.com']);
+
         $this->defaultTest(
             $this->method,
             $this->uri,
             Response::HTTP_FORBIDDEN,
-            role: User::BASIC_USER,
+            data: [
+                'name' => 'Test Group',
+                'description' => '???text???'
+            ],
+            user: $user
         );
     }
 }
