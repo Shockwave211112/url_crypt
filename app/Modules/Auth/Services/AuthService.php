@@ -227,7 +227,7 @@ class AuthService
             $user->markEmailAsVerified();
         }
 
-        $socialNetwork = SocialNetwork::where('social_id', $socialData->id)->first();
+        $socialNetwork = SocialNetwork::where('social_id', $socialData->getId())->first();
         if (!$socialNetwork) {
             SocialNetwork::create([
                 'user_id' => $user->id,

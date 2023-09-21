@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Http\Request;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery;
@@ -27,7 +27,31 @@ class OauthTest extends TestCase
 
         Socialite::shouldReceive('driver->stateless->user')->andReturn($socialiteUser);
 
-        $this->get('/auth/google/callback')->assertJsonStructure(['token']);
+        $this->get('/auth/google/callback')
+            ->assertStatus(200)
+            ->assertJsonStructure(['token']);
+    }
 
+    public function testShouldResponseWithHttpOkIfAlreadyRegistered()
+    {
+        User::factory()->create(['email' => 'test@test.com']);
+        $socialiteUser = Mockery::mock('Laravel\Socialite\Two\User');
+        $socialiteUser
+            ->shouldReceive('getId')
+            ->andReturn(rand())
+            ->shouldReceive('getName')
+            ->andReturn(Str::random(10))
+            ->shouldReceive('getEmail')
+            ->andReturn('test@test.com')
+            ->shouldReceive('getAvatar')
+            ->andReturn('https://google.com')
+            ->shouldReceive('getToken')
+            ->andReturn(Str::random(30));
+
+        Socialite::shouldReceive('driver->stateless->user')->andReturn($socialiteUser);
+
+        $this->get('/auth/google/callback')
+            ->assertStatus(200)
+            ->assertJsonStructure(['token']);
     }
 }
