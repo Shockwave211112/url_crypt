@@ -15,7 +15,7 @@ class UsersObserver
     public function created(Model $model)
     {
         $linkGroup = Group::create([
-            'name' => $model->name . ' Default',
+            'name' => $model->id . ' ' . $model->name . ' Default',
             'description' => 'Default group for user - ' . $model->name,
         ]);
         $linkGroup->users()->attach($model->id);

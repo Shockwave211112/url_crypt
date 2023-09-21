@@ -17,20 +17,9 @@ class DeleteGroupsTest extends TestCase
     public function testShouldResponseWithHttpOk()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--create');
         $user->givePermissionTo('group--delete');
 
-        $this->defaultTest(
-            Request::METHOD_POST,
-            '/groups',
-            data: [
-                'name' => 'Test Group',
-                'description' => '???text???'
-            ],
-            user: $user
-        );
-
-        $group = Group::orderBy('id', 'desc')->first();
+        $group = Group::factory()->user($user->id)->create();
 
         $this->defaultTest(
             $this->method,
@@ -52,7 +41,7 @@ class DeleteGroupsTest extends TestCase
 
     public function testShouldResponseWithHttpUnathIfWithoutToken()
     {
-        $group = Group::first();
+        $group = Group::factory()->create();
 
         $this->defaultTest(
             $this->method,

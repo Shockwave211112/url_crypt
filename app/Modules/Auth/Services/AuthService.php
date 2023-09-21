@@ -214,15 +214,14 @@ class AuthService
     public function callback($data)
     {
         $socialData = Socialite::driver($data['provider'])->stateless()->user();
-        if (!$socialData) {
+        if (!$socialData)
             throw new AuthException(message: 'An error occurred during authorization via ' . $data['provider'], status: '403');
-        }
 
-        $user = User::where('email', $socialData->email)->first();
+        $user = User::where('email', $socialData->getEmail())->first();
         if (!$user) {
             $user = User::create([
-                'name' => $socialData->name,
-                'email' => $socialData->email
+                'name' => $socialData->getName(),
+                'email' => $socialData->getEmail()
             ]);
             $user->assignRole(User::BASIC_USER);
             $user->markEmailAsVerified();
@@ -233,7 +232,7 @@ class AuthService
             SocialNetwork::create([
                 'user_id' => $user->id,
                 'provider' => $data['provider'],
-                'social_id' => $socialData->id,
+                'social_id' => $socialData->getId(),
                 'raw_data' => json_encode($socialData),
             ]);
         };

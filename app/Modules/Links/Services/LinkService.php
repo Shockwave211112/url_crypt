@@ -95,17 +95,19 @@ class LinkService
     public function checkStorePermissions(User $user, array $data)
     {
         if (!$user->hasExactRoles(User::ADMIN)) {
-            if (!in_array($data['group_id'], $user->groups->pluck('id')->toArray()))
-                throw new AuthException('You dont have permissions to add link in this group.', 403);
+            foreach ($data['group_id'] as $data_group) {
+                if (!in_array($data_group, $user->groups->pluck('id')->toArray()))
+                    throw new AuthException('You dont have permissions to add link in this group.', 403);
+
+                if ($user->groups->where('id', $data_group)->first()->count >= config('constants.env.links_per_group'))
+                    throw new DataBaseException('Please select other group. Max count of links reached.', 403);
+            }
 
             if ($user->links->sum('count') >= config('constants.env.links_per_user'))
                 throw new DataBaseException('Maximum of links count reached.', 403);
 
             if ($user->groups->sum('count') >= config('constants.env.groups_per_user'))
                 throw new DataBaseException('Maximum of groups count reached.', 403);
-
-            if ($user->groups->where('id', $data['group_id'])->first()->count >= config('constants.env.links_per_group'))
-                throw new DataBaseException('Please select other group. Max count of links reached.', 403);
         }
     }
 
@@ -135,9 +137,8 @@ class LinkService
      */
     public function hasAccess(User $user, int $id)
     {
-        if (!in_array($id, $user->links->pluck('id')->toArray())) {
+        if (!in_array($id, $user->links->pluck('id')->toArray()))
             throw new AuthException('You dont have permissions to interact with this link.', 403);
-        }
     }
 
     /**

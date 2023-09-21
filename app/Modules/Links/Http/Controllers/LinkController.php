@@ -57,7 +57,7 @@ class LinkController extends Controller
         $data['user_id'] = $user->id;
         $data['referral'] = $service->generateReferral();
 
-        if (!isset($data['group_id'])) $data['group_id'] = $user->groups->pluck('id')[0];
+        if (!isset($data['group_id'])) $data['group_id'] = [$user->groups->pluck('id')[0]];
         $service->checkStorePermissions($user, $data);
 
         foreach ($data['group_id'] as $group) {
@@ -159,7 +159,6 @@ class LinkController extends Controller
     {
         $service->exists($id);
         $service->hasAccess(auth()->user(), $id);
-
         $service->groupsDecrement($id);
 
         return $service->delete($id);

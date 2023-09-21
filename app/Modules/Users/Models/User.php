@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function links(): BelongsToMany
     {
-        return $this->belongsToMany(Link::class, 'link_users', 'user_id', 'link_id');
+        return $this->belongsToMany(Link::class, 'link_users', 'user_id', 'link_id')->withPivot(['user_id']);
     }
 
     public function groups(): BelongsToMany

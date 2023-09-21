@@ -1,68 +1,69 @@
 <?php
 
-namespace Tests\Feature\Groups;
+namespace Tests\Feature\Links;
 
-use App\Modules\Links\Models\Group;
+use App\Modules\Links\Models\Link;
 use App\Modules\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class PatchGroupsTest extends TestCase
+class PatchLinksTest extends TestCase
 {
     protected $method = Request::METHOD_PATCH;
-    protected string $uri = '/groups/';
+    protected string $uri = '/links/';
 
     public function testShouldResponseWithHttpOk()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--patch');
+        $user->givePermissionTo('link--patch');
 
-        $group = Group::factory()->user($user->id)->create();
+        $link = Link::factory()->user($user->id)->group($user->groups->first()->id)->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             data: [
-                'name' => 'Test Group New'
+                'name' => 'Test Link New'
             ],
             user: $user
         );
 
-        $this->assertDatabaseHas('groups', ['name' => 'Test Group New']);
+        $this->assertDatabaseHas('links', ['name' => 'Test Link New']);
     }
 
     public function testShouldResponseWithHttpOkIfNoParams()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--patch');
+        $user->givePermissionTo('link--patch');
 
-        $group = Group::factory()->user($user->id)->create();
+        $link = Link::factory()->user($user->id)->group($user->groups->first()->id)->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             user: $user
         );
 
-        $this->assertDatabaseHas('groups', ['name' => $group->name]);
+        $this->assertDatabaseHas('links', ['name' => $link->name]);
     }
 
     public function testShouldResponseWithHttpUnprocessableIfInvalidParams()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--patch');
+        $user->givePermissionTo('link--patch');
 
-        $group = Group::factory()->user($user->id)->create();
+        $link = Link::factory()->user($user->id)->group($user->groups->first()->id)->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             Response::HTTP_UNPROCESSABLE_ENTITY,
             data: [
                 'name' => 1,
                 'description' => 1,
-                'count' => 'asfasfsa',
+                'referral' => [3],
+                'origin' => 2,
             ],
             user: $user
         );
@@ -70,11 +71,11 @@ class PatchGroupsTest extends TestCase
 
     public function testShouldResponseWithHttpUnathIfWithoutToken()
     {
-        $group = Group::factory()->create();
+        $link = Link::factory()->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             Response::HTTP_UNAUTHORIZED,
             needAuth: false
         );
@@ -83,14 +84,13 @@ class PatchGroupsTest extends TestCase
     public function testShouldResponseWithHttpForbiddenIfNotOwner()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--create');
-        $user->givePermissionTo('group--patch');
+        $user->givePermissionTo('link--patch');
 
-        $group = Group::factory()->create();
+        $link = Link::factory()->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             Response::HTTP_FORBIDDEN,
             user: $user,
         );

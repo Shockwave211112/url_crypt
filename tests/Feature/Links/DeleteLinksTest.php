@@ -1,49 +1,50 @@
 <?php
 
-namespace Tests\Feature\Groups;
+namespace Tests\Feature\Links;
 
-use App\Modules\Links\Models\Group;
-use App\Modules\Links\Models\GroupUser;
+use App\Modules\Links\Models\Link;
 use App\Modules\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class GetByIdGroupsTest extends TestCase
+class DeleteLinksTest extends TestCase
 {
-    protected $method = Request::METHOD_GET;
-    protected string $uri = '/groups/';
+    protected $method = Request::METHOD_DELETE;
+    protected string $uri = '/links/';
 
     public function testShouldResponseWithHttpOk()
     {
         $user = User::factory()->create(['email' => 'test@test.com']);
-        $user->givePermissionTo('group--show');
+        $user->givePermissionTo('link--delete');
 
-        $group = Group::factory()->user($user->id)->create();
+        $link = Link::factory()->user($user->id)->group($user->groups->first()->id)->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             user: $user
         );
+
+        $this->assertDatabaseMissing('links', ['name' => 'Test Link']);
     }
 
     public function testShouldResponseWithHttpNotFound()
     {
         $this->defaultTest(
             $this->method,
-            $this->uri . 9999999,
+            $this->uri . 99999,
             Response::HTTP_NOT_FOUND,
         );
     }
 
     public function testShouldResponseWithHttpUnathIfWithoutToken()
     {
-        $group = Group::factory()->create();
+        $link = Link::factory()->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             Response::HTTP_UNAUTHORIZED,
             needAuth: false
         );
@@ -51,13 +52,16 @@ class GetByIdGroupsTest extends TestCase
 
     public function testShouldResponseWithHttpForbiddenIfNotOwner()
     {
-        $group = Group::factory()->create();
+        $user = User::factory()->create(['email' => 'test@test.com']);
+        $user->givePermissionTo('link--delete');
+
+        $link = Link::factory()->create();
 
         $this->defaultTest(
             $this->method,
-            $this->uri . $group->id,
+            $this->uri . $link->id,
             Response::HTTP_FORBIDDEN,
-            role: User::BASIC_USER,
+            user: $user
         );
     }
 }

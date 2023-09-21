@@ -2,7 +2,9 @@
 
 namespace App\Modules\Links\Models;
 
+use App\Modules\Links\Factories\LinkFactory;
 use App\Modules\Users\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,7 +35,7 @@ class Link extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'link_users', 'link_id', 'user_id');
+        return $this->belongsToMany(User::class, 'link_users', 'link_id', 'user_id')->withPivot(['user_id']);
     }
 
     /**
@@ -43,5 +45,13 @@ class Link extends Model
     public function hasAccess(User $user): bool
     {
         return in_array($user->id, $this->users->pluck('id')->toArray());
+    }
+
+    /**
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return LinkFactory::new();
     }
 }
