@@ -10,9 +10,6 @@ use Tests\TestCase;
 
 class OauthTest extends TestCase
 {
-    protected $method = Request::METHOD_POST;
-    protected string $uri = '/auth/registration';
-
     public function testShouldResponseWithHttpOk()
     {
         $socialiteUser = Mockery::mock('Laravel\Socialite\Two\User');
