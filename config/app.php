@@ -172,6 +172,7 @@ return [
         \App\Modules\Core\Providers\ModuleServiceProvider::class,
         \App\Modules\Core\Providers\GlobalObserverProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
     ])->toArray(),
 
     /*

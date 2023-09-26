@@ -5,6 +5,22 @@ namespace App\Modules\Auth\Http\Requests;
 use App\Modules\Core\Rules\isBase64;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      schema="NewPasswordRequest",
+ *      required={"password", "password_confirmation"},
+ *     @OA\Property(
+ *          property="password",
+ *          type="string",
+ *          example="password"
+ *      ),
+ *     @OA\Property(
+ *          property="password_confirmation",
+ *          type="string",
+ *          example="password"
+ *      )
+ * )
+ */
 class NewPasswordRequest extends FormRequest
 {
     /**

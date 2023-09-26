@@ -1,0 +1,290 @@
+openapi: 3.0.0
+info:
+  title: 'Links API'
+  description: ...
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Authorization.
+      operationId: 2b0e80263dd71562555f47e55869685e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: 'Successfull login.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserToken'
+        403:
+          description: 'Wrong data.'
+        404:
+          description: 'User not found.'
+        422:
+          description: 'Validation error.'
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: 'User registration.'
+      operationId: 056fa15c5ad1f7947054ef8083841eec
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        200:
+          description: 'Successfull registration.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserToken'
+        422:
+          description: 'Validation error.'
+  /auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: 'User logout.'
+      operationId: d0988bc59298933644833e11a57cd51e
+      responses:
+        200:
+          description: 'Successfull logout.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      security:
+        -
+          sanctum: []
+  /email/resend:
+    get:
+      tags:
+        - Auth
+      summary: 'Resending email verification.'
+      operationId: 2021d9d87d02b5ac39a21149105f6831
+      responses:
+        200:
+          description: 'Email sent.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      security:
+        -
+          sanctum: []
+  /email/verify:
+    post:
+      tags:
+        - Auth
+      summary: 'Email verification.'
+      operationId: eb6080e7115b8e7ed37141a4d2266b4f
+      parameters:
+        -
+          name: token
+          in: query
+          description: 'The token that comes to the user in the email.'
+          required: true
+          example: ZXlKcGRpSTZJbGR5VGpoU2RXRllSM0UwYkc1MGJqRnJiRkoyYVhjOVBTSXNJblpoYkhWbElqb2llVEp5WjNkbWJEZGtSMUZQSzJaUU5UaHhORmRuUTFoWGVtNXRXV3RPYUdKdlQzTklaVE12UkVGeVp6MGlMQ0p0WVdNaU9pSXdNRFl6TjJGa05qbGtaalkyT1RVd016ZGtPVFExTTJGa01UY3lNVFZsT1RKbU5HTmhZalkyTVdRMU0yRmxabUZtWkROak5XRTVZekF3WVRGbU9UUmtJaXdpZEdGbklqb2lJbjA9
+      responses:
+        200:
+          description: 'Successfully verified.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        403:
+          description: 'Link expired.'
+        404:
+          description: 'User not found.'
+  /auth/forgot-password:
+    post:
+      tags:
+        - Auth
+      summary: 'Changing the password.'
+      description: 'Sending a password recovery email.'
+      operationId: b67eeaf82f40c70e9d3e5467790134da
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotRequest'
+      responses:
+        200:
+          description: 'Email sent.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        422:
+          description: 'Validation error.'
+  /auth/change-password:
+    post:
+      tags:
+        - Auth
+      summary: 'Changing the password.'
+      description: 'Entering a new password.'
+      operationId: 9314a647e3226b22ed372882149d60d0
+      parameters:
+        -
+          name: token
+          in: query
+          description: 'The token that comes to the user in the email.'
+          required: true
+          example: ZXlKcGRpSTZJbGR5VGpoU2RXRllSM0UwYkc1MGJqRnJiRkoyYVhjOVBTSXNJblpoYkhWbElqb2llVEp5WjNkbWJEZGtSMUZQSzJaUU5UaHhORmRuUTFoWGVtNXRXV3RPYUdKdlQzTklaVE12UkVGeVp6MGlMQ0p0WVdNaU9pSXdNRFl6TjJGa05qbGtaalkyT1RVd016ZGtPVFExTTJGa01UY3lNVFZsT1RKbU5HTmhZalkyTVdRMU0yRmxabUZtWkROak5XRTVZekF3WVRGbU9UUmtJaXdpZEdGbklqb2lJbjA9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPasswordRequest'
+      responses:
+        200:
+          description: 'Password changed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        403:
+          description: 'Link expired.'
+        404:
+          description: 'User not found.'
+  '/auth/{provider}/redirect':
+    post:
+      tags:
+        - Auth
+      summary: 'Getting a link to login via social network.'
+      operationId: dff1ac4551836bd454c09598b675fe42
+      parameters:
+        -
+          name: provider
+          in: path
+          description: 'One of the providers: google | facebook'
+          required: true
+          example: google
+      responses:
+        200:
+          description: "The link to the entrance. After authorization,\n                    a {token} comes through it."
+          content:
+            application/json:
+              schema:
+                properties:
+                  redirect_url:
+                    description: 'The link to login via social network.'
+                    type: string
+                    example: 'https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&response_type=code'
+                type: object
+  '/auth/{provider}/callback':
+    get:
+      tags:
+        - Auth
+      summary: 'Getting info of user and send token to auth.'
+      operationId: 83826e677b9e2bfa9abcb7296d5b919e
+      responses:
+        200:
+          description: 'Successfull login.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserToken'
+        403:
+          description: 'Error occurred during auth via social network.'
+components:
+  schemas:
+    MessageResponse:
+      properties:
+        message:
+          type: string
+          example: 'Informational message'
+      type: object
+    ForgotRequest:
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          example: example@mail.com
+      type: object
+    LoginRequest:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: example@mail.com
+        password:
+          type: string
+          example: password
+      type: object
+    NewPasswordRequest:
+      required:
+        - password
+        - password_confirmation
+      properties:
+        password:
+          type: string
+          example: password
+        password_confirmation:
+          type: string
+          example: password
+      type: object
+    RegisterRequest:
+      required:
+        - email
+        - password
+        - password_confirmation
+        - name
+      properties:
+        email:
+          type: string
+          example: example@mail.com
+        name:
+          type: string
+          example: Example
+        password:
+          type: string
+          example: password
+        password_confirmation:
+          type: string
+          example: password
+      type: object
+    RolePermissionsRequest:
+      required:
+        - role_id
+        - permissions
+      properties:
+        role_id:
+          type: integer
+          example: '1'
+        permissions:
+          type: array
+          items:
+            type: integer
+            example:
+              - '1'
+              - '2'
+              - '3'
+      type: object
+    UserToken:
+      properties:
+        token:
+          type: string
+          example: tl3waWcgC7o1oORhpZzjBnWcoz130pCgYjVWrX1f0ff6cfee
+      type: object
+  securitySchemes:
+    sanctum:
+      type: apiKey
+      description: 'Enter token in format (Bearer <token>)'
+      name: Authorization
+      in: header
