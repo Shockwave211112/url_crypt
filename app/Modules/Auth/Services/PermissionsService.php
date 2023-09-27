@@ -6,6 +6,41 @@ use App\Modules\Core\Exceptions\DataBaseException;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
+/**
+ * @OA\Schema(
+ *      schema="Permission",
+ *      @OA\Property(
+ *          property="id",
+ *          type="integer",
+ *          example="1"
+ *      ),
+ *      @OA\Property(
+ *          property="name",
+ *          type="string",
+ *          example="permission--example"
+ *      ),
+ *      @OA\Property(
+ *          property="guard_name",
+ *          type="string",
+ *          example="web"
+ *      ),
+ *      @OA\Property(
+ *          property="description",
+ *          type="string",
+ *          example="Permission example description."
+ *      ),
+ *      @OA\Property(
+ *          property="created_at",
+ *          type="datetime",
+ *          example="2023-09-27T06:16:30.000000Z"
+ *      ),
+ *      @OA\Property(
+ *          property="updated_at",
+ *          type="datetime",
+ *          example="2023-09-27T06:16:30.000000Z"
+ *      ),
+ * )
+ */
 class PermissionsService
 {
     public function index()

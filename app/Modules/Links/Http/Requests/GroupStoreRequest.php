@@ -4,6 +4,22 @@ namespace App\Modules\Links\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      schema="StoreLinkRequest",
+ *      required={"name", "description"},
+ *      @OA\Property(
+ *          property="name",
+ *          type="string",
+ *          example="Example group"
+ *      ),
+ *     @OA\Property(
+ *          property="description",
+ *          type="string",
+ *          example="Example description"
+ *      ),
+ * )
+ */
 class GroupStoreRequest extends FormRequest
 {
     /**

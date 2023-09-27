@@ -247,6 +247,13 @@ class AuthController extends Controller
      *     path="/auth/{provider}/callback",
      *     summary="Getting info of user and send token to auth.",
      *     tags={"Auth"},
+     *     @OA\Parameter(
+     *          description="One of the providers: google | facebook",
+     *          in="path",
+     *          name="provider",
+     *          required=true,
+     *          example="google"
+     *      ),
      *     @OA\Response(
      *          response=200, description="Successfull login.",
      *          @OA\JsonContent(ref="#/components/schemas/UserToken")

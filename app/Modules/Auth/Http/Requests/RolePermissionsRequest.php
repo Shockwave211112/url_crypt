@@ -18,7 +18,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *          type="array",
  *          @OA\Items(
  *              type="integer",
- *              example={"1", "2", "3"}
+ *              example="1"
  *          )
  *      ),
  * )

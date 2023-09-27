@@ -32,6 +32,19 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/links",
+     *     summary="Get paginated list of links.",
+     *     description="If admin, shows all existing ones. If a user, then only his links.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *          response=200, description="Paginated list.",
+     *          @OA\JsonContent(ref="#/components/schemas/LinksListPaginated")
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error.")
+     * )
      * @PermissionGuard link--list
      * @param LinkService $service
      * @return JsonResponse
@@ -42,6 +55,28 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/links",
+     *     summary="Create new link.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/StoreLinkRequest")
+     *             )
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Paginated list.",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Info message."),
+     *              @OA\Property(property="entity", ref="#/components/schemas/Link"))
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error."),
+     *     @OA\Response(response=422, description="Validation error."),
+     * )
      * @PermissionGuard link--create
      * @param LinkStoreRequest $request
      * @param LinkService $service
@@ -68,6 +103,27 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/links/{id}",
+     *     summary="Show link by id.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *          description="ID of link.",
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          example="1"
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Link object.",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="entity", ref="#/components/schemas/Link"))
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error."),
+     *     @OA\Response(response=404, description="Link not found."),
+     * )
      * @PermissionGuard link--show
      * @param int $id
      * @param LinkService $service
@@ -84,6 +140,37 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/links/{id}",
+     *     summary="Update all link data.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *          description="ID of link.",
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          example="1"
+     *      ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/PutLinkRequest")
+     *             )
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Link updated.",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Info message."),
+     *              @OA\Property(property="entity", ref="#/components/schemas/Link"),
+     *              @OA\Property(property="old_entity", ref="#/components/schemas/Link"))
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error."),
+     *     @OA\Response(response=404, description="Link not found."),
+     *     @OA\Response(response=422, description="Validation error."),
+     * )
      * @PermissionGuard link--put
      * @param int $id
      * @param LinkPutRequest $request
@@ -116,6 +203,37 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Patch(
+     *     path="/links/{id}",
+     *     summary="Partly update link data.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *          description="ID of link.",
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          example="1"
+     *      ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/PatchLinkRequest")
+     *             )
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Link updated.",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Info message."),
+     *              @OA\Property(property="entity", ref="#/components/schemas/Link"),
+     *              @OA\Property(property="old_entity", ref="#/components/schemas/Link"))
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error."),
+     *     @OA\Response(response=404, description="Link not found."),
+     *     @OA\Response(response=422, description="Validation error."),
+     * )
      * @PermissionGuard link--patch
      * @param int $id
      * @param LinkPatchRequest $request
@@ -148,6 +266,26 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="/links/{id}",
+     *     summary="Delete link.",
+     *     tags={"Links"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *          description="ID of link.",
+     *          in="path",
+     *          name="id",
+     *          required=true,
+     *          example="1"
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Link deleted.",
+     *          @OA\JsonContent(ref="#/components/schemas/MessageResponse")
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated."),
+     *     @OA\Response(response=403, description="Permissions error."),
+     *     @OA\Response(response=404, description="Link not found."),
+     * )
      * @PermissionGuard link--delete
      * @param int $id
      * @param LinkService $service
@@ -165,6 +303,21 @@ class LinkController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/l/{referral}",
+     *     summary="Redirect to origin by referral.",
+     *     description="Redirects to the original link, while increasing the click-through counter.",
+     *     tags={"Links"},
+     *     @OA\Parameter(
+     *          description="Referral code.",
+     *          in="path",
+     *          name="referral",
+     *          required=true,
+     *          example="go1ZKwZNlg"
+     *      ),
+     *     @OA\Response(response=302, description="Successful redirect."),
+     *     @OA\Response(response=404, description="Link not found."),
+     * )
      * @param string $referral
      * @param LinkService $service
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

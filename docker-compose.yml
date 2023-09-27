@@ -22,6 +22,7 @@ services:
             context: .
             dockerfile: docker/app/Dockerfile
         container_name: yazu_app
+        restart: always
         volumes:
             - ./:/var/www/yazu_links
             - ./docker/app/php.conf:/usr/local/etc/php-fpm.d/www.conf

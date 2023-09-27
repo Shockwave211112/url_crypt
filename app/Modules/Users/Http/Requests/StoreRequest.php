@@ -4,6 +4,27 @@ namespace App\Modules\Users\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      schema="StoreUserRequest",
+ *      required={"email", "password", "name"},
+ *      @OA\Property(
+ *          property="email",
+ *          type="string",
+ *          example="example@mail.com"
+ *      ),
+ *     @OA\Property(
+ *          property="password",
+ *          type="string",
+ *          example="password"
+ *      ),
+ *     @OA\Property(
+ *          property="name",
+ *          type="string",
+ *          example="Example"
+ *      ),
+ * )
+ */
 class StoreRequest extends FormRequest
 {
     /**

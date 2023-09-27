@@ -4,6 +4,27 @@ namespace App\Modules\Links\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      schema="PutGroupRequest",
+ *      required={"name", "description", "count"},
+ *      @OA\Property(
+ *          property="name",
+ *          type="string",
+ *          example="Example group"
+ *      ),
+ *     @OA\Property(
+ *          property="description",
+ *          type="string",
+ *          example="Example description"
+ *      ),
+ *     @OA\Property(
+ *          property="count",
+ *          type="integer",
+ *          example="10"
+ *      )
+ * )
+ */
 class
 GroupPutRequest extends FormRequest
 {

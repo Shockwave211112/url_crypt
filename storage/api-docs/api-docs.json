@@ -294,6 +294,15 @@
                 ],
                 "summary": "Getting info of user and send token to auth.",
                 "operationId": "83826e677b9e2bfa9abcb7296d5b919e",
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "in": "path",
+                        "description": "One of the providers: google | facebook",
+                        "required": true,
+                        "example": "google"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successfull login.",
@@ -310,6 +319,1166 @@
                     }
                 }
             }
+        },
+        "/permissions": {
+            "get": {
+                "tags": [
+                    "Permissions"
+                ],
+                "summary": "Get paginated list of links.",
+                "description": "Only for admins.",
+                "operationId": "59924a6edc50841ff7935e2e7e2d1ad2",
+                "responses": {
+                    "200": {
+                        "description": "List of all permissions.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Permission"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/permissions/{id}": {
+            "get": {
+                "tags": [
+                    "Permissions"
+                ],
+                "summary": "Show permission by id.",
+                "description": "Only for admins.",
+                "operationId": "70a29acf473ec633a772896fd123a1da",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of permission.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Permission object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Permission"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Permission not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/permissions/sync": {
+            "post": {
+                "tags": [
+                    "Permissions"
+                ],
+                "summary": "Set permissions for role",
+                "operationId": "d6814e3b51608d621734cd538b96aa2e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RolePermissionsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/groups": {
+            "get": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Get paginated list of groups.",
+                "description": "If admin, shows all existing ones. If a user, then only his groups.",
+                "operationId": "cfc7c3d292050d13e480039da7bc441b",
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GroupsListPaginated"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Create new group.",
+                "operationId": "7822900eccb4f28c08960cd64607dc2b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreGroupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/groups/{id}": {
+            "get": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Show group by id.",
+                "operationId": "7450ba099c5d5127dbe6ceb30c5c8a44",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of group.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Group object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Update all group data.",
+                "operationId": "06accf2e97f47afe7eebb09f40112f84",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of group.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PutGroupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Group updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Group not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Delete group.",
+                "operationId": "46134f605004e58a96c3da4ad69e41e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of group.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Group deleted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Group not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "Partly update group data.",
+                "operationId": "580abc69157d81a2e9f7dea753d19e47",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of group.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchGroupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Group updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/Group"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Group not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/links": {
+            "get": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Get paginated list of links.",
+                "description": "If admin, shows all existing ones. If a user, then only his links.",
+                "operationId": "b94ffb5979c83b6ffd667b522d898802",
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LinksListPaginated"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Create new link.",
+                "operationId": "0a6b0569be350f4a81e51be1888e3bf5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreLinkRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/links/{id}": {
+            "get": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Show link by id.",
+                "operationId": "068417c3fc1ff620108c70ba259b66be",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of link.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Link object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Link not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Update all link data.",
+                "operationId": "ccbf3039865493f1f7c1c7c858d825f0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of link.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PutLinkRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Link updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Link not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Delete link.",
+                "operationId": "97e3d3c630fafdf7d97e008344c6a5f3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of link.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Link deleted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Link not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Partly update link data.",
+                "operationId": "55588508e9bffa5d7aeae5c8f4a9d596",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of link.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchLinkRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Link updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/Link"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "Link not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/l/{referral}": {
+            "get": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Redirect to origin by referral.",
+                "description": "Redirects to the original link, while increasing the click-through counter.",
+                "operationId": "55eb6af6a2028f159053fa20ae1af272",
+                "parameters": [
+                    {
+                        "name": "referral",
+                        "in": "path",
+                        "description": "Referral code.",
+                        "required": true,
+                        "example": "go1ZKwZNlg"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Successful redirect."
+                    },
+                    "404": {
+                        "description": "Link not found."
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get paginated list of users.",
+                "description": "Only for admins.",
+                "operationId": "d8640887f6a3f40193deeb33300309da",
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UsersListPaginated"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create new user manually.",
+                "description": "Only for admins.",
+                "operationId": "a2024e7428c2b58c64a6da90003a7240",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paginated list.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Show user by id.",
+                "description": "Only for admins.",
+                "operationId": "550c0be2ab85ba78b49fb11dfa03e192",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update all user data.",
+                "description": "Only for admins.",
+                "operationId": "9fb54e5f5daf60dc628e49da7ba764d5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PutUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user.",
+                "description": "Only for admins.",
+                "operationId": "eca0ff485f5a960a804f0992ae1ec9be",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Partly update user data.",
+                "description": "Only for admins.",
+                "operationId": "7f4b042564dfd3e52fc25d585c5e1da0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user.",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Info message."
+                                        },
+                                        "entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "old_entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/user/info": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Show info of loginned user.",
+                "operationId": "6d570e9f19903af4e05356943cbd8c88",
+                "responses": {
+                    "200": {
+                        "description": "Info about current user.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "entity": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "roles": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "admin"
+                                            }
+                                        },
+                                        "groups": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Group"
+                                            }
+                                        },
+                                        "links": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Link"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Permissions error."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -318,7 +1487,7 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Informational message"
+                        "example": "Info message"
                     }
                 },
                 "type": "object"
@@ -410,6 +1579,424 @@
                         "type": "array",
                         "items": {
                             "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Permission": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "permission--example"
+                    },
+                    "guard_name": {
+                        "type": "string",
+                        "example": "web"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Permission example description."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "PatchGroupRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "example": "10"
+                    }
+                },
+                "type": "object"
+            },
+            "PutGroupRequest": {
+                "required": [
+                    "name",
+                    "description",
+                    "count"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "example": "10"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreLinkRequest": {
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    }
+                },
+                "type": "object"
+            },
+            "PatchLinkRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "origin": {
+                        "type": "string",
+                        "example": "https://example.url/11111"
+                    },
+                    "referral": {
+                        "type": "string",
+                        "example": "go1ZKwZNlg"
+                    },
+                    "group_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PutLinkRequest": {
+                "required": [
+                    "name",
+                    "description",
+                    "origin",
+                    "referral"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "origin": {
+                        "type": "string",
+                        "example": "https://example.url/11111"
+                    },
+                    "referral": {
+                        "type": "string",
+                        "example": "go1ZKwZNlg"
+                    },
+                    "group_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "StoreGroupRequest": {
+                "required": [
+                    "name",
+                    "description",
+                    "origin"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "origin": {
+                        "type": "string",
+                        "example": "https://example.url/11111"
+                    },
+                    "group_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Group": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example group"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example description"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "GroupsListPaginated": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Group"
+                        }
+                    },
+                    "first_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/groups?page=1"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "last_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/groups?page=2"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "example": "null | http://links.com/groups?page=2"
+                                },
+                                "label": {
+                                    "type": "string",
+                                    "example": "Next &raquo"
+                                },
+                                "active": {
+                                    "type": "boolean",
+                                    "example": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "next_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/groups?page=2"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "http://links.com/groups"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "prev_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/groups?page=2"
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": "15"
+                    }
+                },
+                "type": "object"
+            },
+            "Link": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Link example"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Example of link description."
+                    },
+                    "origin": {
+                        "type": "string",
+                        "example": "https://example.url/11111"
+                    },
+                    "referral": {
+                        "type": "string",
+                        "example": "go1ZKwZNlg"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "LinksListPaginated": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        }
+                    },
+                    "first_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/links?page=1"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "last_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/links?page=2"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "example": "null | http://links.com/links?page=2"
+                                },
+                                "label": {
+                                    "type": "string",
+                                    "example": "Next &raquo"
+                                },
+                                "active": {
+                                    "type": "boolean",
+                                    "example": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "next_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/links?page=2"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "http://links.com/links"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "prev_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/links?page=2"
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": "15"
+                    }
+                },
+                "type": "object"
+            },
+            "PatchUserRequest": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "example@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example"
+                    },
+                    "role_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
                             "example": [
                                 "1",
                                 "2",
@@ -420,11 +2007,169 @@
                 },
                 "type": "object"
             },
+            "PutUserRequest": {
+                "required": [
+                    "email",
+                    "password",
+                    "name"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "example@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example"
+                    },
+                    "role_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "StoreUserRequest": {
+                "required": [
+                    "email",
+                    "password",
+                    "name"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "example@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example"
+                    }
+                },
+                "type": "object"
+            },
             "UserToken": {
                 "properties": {
                     "token": {
                         "type": "string",
                         "example": "tl3waWcgC7o1oORhpZzjBnWcoz130pCgYjVWrX1f0ff6cfee"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@mail.com"
+                    },
+                    "email_verified_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-09-27T06:16:30.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "UsersListPaginated": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "first_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/user?page=1"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "last_page_url": {
+                        "type": "string",
+                        "example": "http://links.com/user?page=2"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "example": "null | http://links.com/user?page=2"
+                                },
+                                "label": {
+                                    "type": "string",
+                                    "example": "Next &raquo"
+                                },
+                                "active": {
+                                    "type": "boolean",
+                                    "example": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "next_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/user?page=2"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "http://links.com/user"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "prev_page_url": {
+                        "type": "string",
+                        "example": "null | http://links.com/user?page=2"
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": "15"
                     }
                 },
                 "type": "object"

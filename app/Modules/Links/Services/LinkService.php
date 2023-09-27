@@ -105,9 +105,6 @@ class LinkService
 
             if ($user->links->sum('count') >= config('constants.env.links_per_user'))
                 throw new DataBaseException('Maximum of links count reached.', 403);
-
-            if ($user->groups->sum('count') >= config('constants.env.groups_per_user'))
-                throw new DataBaseException('Maximum of groups count reached.', 403);
         }
     }
 

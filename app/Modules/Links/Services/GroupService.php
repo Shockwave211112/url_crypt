@@ -59,4 +59,10 @@ class GroupService
         if (!in_array($id, $user->groups->pluck('id')->toArray()))
             throw new AuthException('You dont have permissions to interact with this group.', 403);
     }
+
+    public function canStore(User $user)
+    {
+        if ($user->groups->sum('count') >= config('constants.env.groups_per_user'))
+            throw new DataBaseException('Maximum of groups count reached.', 403);
+    }
 }

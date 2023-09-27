@@ -4,6 +4,34 @@ namespace App\Modules\Users\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      schema="PatchUserRequest",
+ *      @OA\Property(
+ *          property="email",
+ *          type="string",
+ *          example="example@mail.com"
+ *      ),
+ *     @OA\Property(
+ *          property="password",
+ *          type="string",
+ *          example="password"
+ *      ),
+ *     @OA\Property(
+ *          property="name",
+ *          type="string",
+ *          example="Example"
+ *      ),
+ *     @OA\Property(
+ *          property="role_id",
+ *          type="array",
+ *          @OA\Items(
+ *              type="integer",
+ *              example={"1", "2", "3"}
+ *          )
+ *      ),
+ * )
+ */
 class PatchRequest extends FormRequest
 {
     /**
