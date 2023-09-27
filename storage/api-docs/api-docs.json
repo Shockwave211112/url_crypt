@@ -97,6 +97,9 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
                     }
                 },
                 "security": [
@@ -123,6 +126,9 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
                     }
                 },
                 "security": [

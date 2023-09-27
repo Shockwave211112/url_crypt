@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/auth/login",
      *     summary="Authorization.",
      *     tags={"Auth"},
@@ -46,7 +46,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/auth/register",
      *     summary="User registration.",
      *     tags={"Auth"},
@@ -74,7 +74,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Get (
+     * @OA\Get(
      *     path="/auth/logout",
      *     summary="User logout.",
      *     tags={"Auth"},
@@ -82,7 +82,8 @@ class AuthController extends Controller
      *     @OA\Response(
      *          response=200, description="Successfull logout.",
      *          @OA\JsonContent(ref="#/components/schemas/MessageResponse")
-     *      )
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated.")
      * )
      * @return \Illuminate\Http\JsonResponse
      */
@@ -95,7 +96,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Get (
+     * @OA\Get(
      *     path="/email/resend",
      *     summary="Resending email verification.",
      *     tags={"Auth"},
@@ -103,7 +104,8 @@ class AuthController extends Controller
      *     @OA\Response(
      *          response=200, description="Email sent.",
      *          @OA\JsonContent(ref="#/components/schemas/MessageResponse")
-     *      )
+     *      ),
+     *     @OA\Response(response=401, description="Unauthenticated.")
      * )
      * @param AuthService $service
      * @return \Illuminate\Http\JsonResponse
@@ -115,7 +117,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/email/verify",
      *     summary="Email verification.",
      *     tags={"Auth"},
@@ -144,7 +146,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/auth/forgot-password",
      *     summary="Changing the password.",
      *     description="Sending a password recovery email.",
@@ -172,7 +174,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/auth/change-password",
      *     summary="Changing the password.",
      *     description="Entering a new password.",
@@ -209,7 +211,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/auth/{provider}/redirect",
      *     summary="Getting a link to login via social network.",
      *     tags={"Auth"},
@@ -243,7 +245,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Get (
+     * @OA\Get(
      *     path="/auth/{provider}/callback",
      *     summary="Getting info of user and send token to auth.",
      *     tags={"Auth"},

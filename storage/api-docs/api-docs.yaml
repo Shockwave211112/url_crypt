@@ -63,6 +63,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
+        401:
+          description: Unauthenticated.
       security:
         -
           sanctum: []
@@ -79,6 +81,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
+        401:
+          description: Unauthenticated.
       security:
         -
           sanctum: []
