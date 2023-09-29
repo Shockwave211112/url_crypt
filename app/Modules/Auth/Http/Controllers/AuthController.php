@@ -49,6 +49,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/auth/register",
      *     summary="User registration.",
+     *     description="Remark: When creating a user, a default group is generated for its links.",
      *     tags={"Auth"},
      *     @OA\RequestBody(
      *         required=true,
@@ -214,6 +215,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/auth/{provider}/redirect",
      *     summary="Getting a link to login via social network.",
+     *     description="Remark: When creating a user, a default group is generated for its links.",
      *     tags={"Auth"},
      *     @OA\Parameter(
      *          description="One of the providers: google | facebook",

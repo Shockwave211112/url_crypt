@@ -59,7 +59,7 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/user",
      *     summary="Create new user manually.",
-     *     description="Only for admins.",
+     *     description="Only for admins. Remark: When creating a user, a default group is generated for its links.",
      *     tags={"User"},
      *     security={{"sanctum":{}}},
      *     @OA\RequestBody(

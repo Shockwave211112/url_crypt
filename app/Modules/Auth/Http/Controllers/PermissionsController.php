@@ -8,21 +8,16 @@ use App\Modules\Auth\Services\PermissionsService;
 
 class PermissionsController extends Controller
 {
-
     /**
      * @OA\Get(
      *     path="/permissions",
-     *     summary="Get paginated list of links.",
+     *     summary="Get list of permissions.",
      *     description="Only for admins.",
      *     tags={"Permissions"},
      *     security={{"sanctum":{}}},
      *     @OA\Response(
      *          response=200, description="List of all permissions.",
-     *          @OA\JsonContent(
-     *              @OA\Property(
-     *              property="data",
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/Permission")))
+     *          @OA\JsonContent(ref="#/components/schemas/PermissionsList")
      *      ),
      *     @OA\Response(response=401, description="Unauthenticated."),
      *     @OA\Response(response=403, description="Permissions error.")

@@ -2,10 +2,8 @@
 
 namespace App\Modules\Users\Seeders;
 
-use App\Modules\Links\Http\Controllers\GroupController;
-use App\Modules\Links\Http\Controllers\LinkController;
-use App\Modules\Users\Http\Controllers\UserController;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 
 class PermissionsSeeder extends Seeder
@@ -15,16 +13,19 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $controllers = [
-            UserController::class,
-            LinkController::class,
-            GroupController::class
-        ];
+        $controllers = [];
+        foreach (Route::getRoutes()->getRoutes() as $route) {
+            $action = $route->getAction();
+            if (array_key_exists('controller', $action)) $controllers[] = explode('@', $action['controller'])[0];
+        }
+        $controllers = collect($controllers)->unique();
 
         foreach ($controllers as $controller) {
-            foreach ($controller::$permissions as $permission) {
-                Permission::firstOrCreate(['name' => $permission['name'], 'description' => $permission['description']]);
-            };
+            if (property_exists($controller, 'permissions')) {
+                foreach ($controller::$permissions as $permission) {
+                    Permission::firstOrCreate(['name' => $permission['name'], 'description' => $permission['description']]);
+                };
+            }
         }
     }
 }

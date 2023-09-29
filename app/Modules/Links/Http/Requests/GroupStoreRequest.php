@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *      schema="StoreLinkRequest",
+ *      schema="StoreGroupRequest",
  *      required={"name", "description"},
  *      @OA\Property(
  *          property="name",

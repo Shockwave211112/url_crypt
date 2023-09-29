@@ -58,6 +58,7 @@ class LinkController extends Controller
      * @OA\Post(
      *     path="/links",
      *     summary="Create new link.",
+     *     description="Remark: If you do not specify the groups, the default one will be automatically set.",
      *     tags={"Links"},
      *     security={{"sanctum":{}}},
      *     @OA\RequestBody(

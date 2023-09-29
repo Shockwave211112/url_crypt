@@ -40,6 +40,11 @@ use Spatie\Permission\Models\Role;
  *          example="2023-09-27T06:16:30.000000Z"
  *      ),
  * )
+ * @OA\Schema(
+ *      schema="PermissionsList",
+ *      type="array",
+ *      @OA\Items(ref="#/components/schemas/Permission"),
+ * )
  */
 class PermissionsService
 {

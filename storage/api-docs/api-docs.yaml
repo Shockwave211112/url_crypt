@@ -34,6 +34,7 @@ paths:
       tags:
         - Auth
       summary: 'User registration.'
+      description: 'Remark: When creating a user, a default group is generated for its links.'
       operationId: 056fa15c5ad1f7947054ef8083841eec
       requestBody:
         required: true
@@ -168,6 +169,7 @@ paths:
       tags:
         - Auth
       summary: 'Getting a link to login via social network.'
+      description: 'Remark: When creating a user, a default group is generated for its links.'
       operationId: dff1ac4551836bd454c09598b675fe42
       parameters:
         -
@@ -214,7 +216,7 @@ paths:
     get:
       tags:
         - Permissions
-      summary: 'Get paginated list of links.'
+      summary: 'Get list of permissions.'
       description: 'Only for admins.'
       operationId: 59924a6edc50841ff7935e2e7e2d1ad2
       responses:
@@ -223,12 +225,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Permission'
-                type: object
+                $ref: '#/components/schemas/PermissionsList'
         401:
           description: Unauthenticated.
         403:
@@ -528,6 +525,7 @@ paths:
       tags:
         - Links
       summary: 'Create new link.'
+      description: 'Remark: If you do not specify the groups, the default one will be automatically set.'
       operationId: 0a6b0569be350f4a81e51be1888e3bf5
       requestBody:
         required: true
@@ -749,7 +747,7 @@ paths:
       tags:
         - User
       summary: 'Create new user manually.'
-      description: 'Only for admins.'
+      description: 'Only for admins. Remark: When creating a user, a default group is generated for its links.'
       operationId: a2024e7428c2b58c64a6da90003a7240
       requestBody:
         required: true
@@ -1064,6 +1062,10 @@ components:
           format: date-time
           example: '2023-09-27T06:16:30.000000Z'
       type: object
+    PermissionsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
     PatchGroupRequest:
       properties:
         name:
@@ -1092,7 +1094,7 @@ components:
           type: integer
           example: '10'
       type: object
-    StoreLinkRequest:
+    StoreGroupRequest:
       required:
         - name
         - description
@@ -1149,7 +1151,7 @@ components:
             type: integer
             example: '1'
       type: object
-    StoreGroupRequest:
+    StoreLinkRequest:
       required:
         - name
         - description
