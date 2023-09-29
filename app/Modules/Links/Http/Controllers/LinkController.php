@@ -12,6 +12,7 @@ use App\Modules\Links\Http\Requests\LinkStoreRequest;
 use App\Modules\Links\Services\GroupService;
 use App\Modules\Links\Services\LinkService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
@@ -116,10 +117,28 @@ class LinkController extends Controller
      *          required=true,
      *          example="1"
      *      ),
+     *      @OA\Parameter(
+     *          description="Type of statistic sort (asc | desc).",
+     *          in="query",
+     *          name="sort",
+     *          example="asc"
+     *      ),
+     *     @OA\Parameter(
+     *          description="Sorting statistic by: (day | month | year). Nothing = deafult = full date.",
+     *          in="query",
+     *          name="by",
+     *          example="day"
+     *      ),
      *     @OA\Response(
      *          response=200, description="Link object.",
      *          @OA\JsonContent(
-     *              @OA\Property(property="entity", ref="#/components/schemas/Link"))
+     *              @OA\Property(property="entity", ref="#/components/schemas/Link"),
+     *              @OA\Property(property="stats", type="array",
+     *                  @OA\Items(
+     *                      @OA\Property(property="date", type="datetime", example="2024-10-29 00:00:00"),
+     *                      @OA\Property(property="hits", type="integer", example="1")
+     *                  )),
+     *              )
      *      ),
      *     @OA\Response(response=401, description="Unauthenticated."),
      *     @OA\Response(response=403, description="Permissions error."),
@@ -132,12 +151,12 @@ class LinkController extends Controller
      * @throws AuthException
      * @throws DataBaseException
      */
-    public function show(int $id, LinkService $service)
+    public function show(Request $request, int $id, LinkService $service)
     {
         $service->exists($id);
         $service->hasAccess(auth()->user(), $id);
 
-        return $service->show($id);
+        return $service->show($id, $request);
     }
 
     /**

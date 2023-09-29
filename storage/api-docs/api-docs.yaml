@@ -568,6 +568,16 @@ paths:
           description: 'ID of link.'
           required: true
           example: '1'
+        -
+          name: sort
+          in: query
+          description: 'Type of statistic sort (asc | desc).'
+          example: asc
+        -
+          name: by
+          in: query
+          description: 'Sorting statistic by: (day | month | year). Nothing = deafult = full date.'
+          example: day
       responses:
         200:
           description: 'Link object.'
@@ -577,6 +587,18 @@ paths:
                 properties:
                   entity:
                     $ref: '#/components/schemas/Link'
+                  stats:
+                    type: array
+                    items:
+                      properties:
+                        date:
+                          type: string
+                          format: date-time
+                          example: '2024-10-29 00:00:00'
+                        hits:
+                          type: integer
+                          example: '1'
+                      type: object
                 type: object
         401:
           description: Unauthenticated.

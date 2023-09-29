@@ -12,6 +12,7 @@ use App\Modules\Links\Models\Link;
 use App\Modules\Links\Models\LinkStatistic;
 use App\Modules\Users\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -35,7 +36,7 @@ class LinkService
         else {
             return Cache::tags(['User:' . $user->id, 'Link', 'pagination'])
                 ->remember($user->id . '-Link-page-' . request('page', default: 1), now()->addMinutes(180),
-                    fn () => $user->links->forPage(request('page', default: 1), 10));
+                    fn() => $user->links->forPage(request('page', default: 1), 10));
         }
     }
 
@@ -44,20 +45,27 @@ class LinkService
      * @return JsonResponse
      * @throws DataBaseException
      */
-    public function show(int $id)
+    public function show(int $id, Request $request)
     {
         $record = Cache::tags('Link')
             ->remember('Link:' . $id, now()->addMinutes(180),
-                fn () => Link::find($id));
+                fn() => Link::find($id));
 
         if ($record) {
-            $linkStat = Cache::tags('LinkStatistic')
-                ->remember('LinkStat:' . $id, now()->addMinutes(180),
-                    fn () => LinkStatistic::where('link_id', $id)->select('date', 'hits')->get());
+//            $linkStat = Cache::tags('LinkStatistic')
+//                ->remember('LinkStat:' . $id, now()->addMinutes(180),
+//                    fn () => LinkStatistic::where('link_id', $id)->select('date', 'hits')->get());
+            $linkStat = LinkStatistic::where('link_id', $id)->select('date', 'hits');
+
+            if (isset($request['sort'])) $sortType = $request['sort'];
+            else $sortType = "asc";
+
+            if (isset($request['by']) && in_array(strtolower($request['by']), ['day', 'month', 'year'])) $linkStat->orderByRaw("EXTRACT (" . $request['by'] . " FROM date) " . $sortType);
+            else $linkStat->orderBy('date', $sortType);
 
             return response()->json([
                 'entity' => $record,
-                'stats' => $linkStat
+                'stats' => $linkStat->get()
             ]);
         }
         throw new DataBaseException(message: 'Link not found.', status: 404);
@@ -74,7 +82,7 @@ class LinkService
     {
         $link = Cache::tags('Link')
             ->remember('Link:' . $referral, now()->addMinutes(180),
-                fn () => Link::where('referral', $referral)->first());
+                fn() => Link::where('referral', $referral)->first());
 
         if (!$link) throw new DataBaseException('Link not found.', 404);
 
