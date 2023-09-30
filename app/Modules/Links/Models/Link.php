@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @OA\Schema(
@@ -162,6 +163,11 @@ class Link extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'link_users', 'link_id', 'user_id')->withPivot(['user_id']);
+    }
+
+    public function stats(): HasMany
+    {
+        return $this->hasMany(LinkStatistic::class);
     }
 
     /**

@@ -47,24 +47,27 @@ class LinkService
      */
     public function show(int $id, Request $request)
     {
-        $record = Cache::tags('Link')
+        $link = Cache::tags('Link')
             ->remember('Link:' . $id, now()->addMinutes(180),
                 fn() => Link::find($id));
 
-        if ($record) {
-//            $linkStat = Cache::tags('LinkStatistic')
-//                ->remember('LinkStat:' . $id, now()->addMinutes(180),
-//                    fn () => LinkStatistic::where('link_id', $id)->select('date', 'hits')->get());
-            $linkStat = LinkStatistic::where('link_id', $id)->select('date', 'hits');
+        if ($link) {
+            Cache::tags('Referral')->put("Link:" . $link->referral, now()->addMinutes(180));
+            $linkStat = $link->stats();
 
             if (isset($request['sort'])) $sortType = $request['sort'];
             else $sortType = "asc";
 
-            if (isset($request['by']) && in_array(strtolower($request['by']), ['day', 'month', 'year'])) $linkStat->orderByRaw("EXTRACT (" . $request['by'] . " FROM date) " . $sortType);
-            else $linkStat->orderBy('date', $sortType);
+            if (isset($request['by'])) {
+                if (in_array($request['by'], ['day', 'month', 'year']))
+                    $linkStat->orderByRaw("EXTRACT (" . $request['by'] . " FROM date) " . $sortType);
+                elseif ($request['by'] == 'hits')
+                    $linkStat->orderBy('hits', $sortType);
+            }
+            else    $linkStat->orderBy('date', $sortType);
 
             return response()->json([
-                'entity' => $record,
+                'entity' => $link,
                 'stats' => $linkStat->get()
             ]);
         }
@@ -80,7 +83,7 @@ class LinkService
      */
     public function referral(string $referral)
     {
-        $link = Cache::tags('Link')
+        $link = Cache::tags('Referral')
             ->remember('Link:' . $referral, now()->addMinutes(180),
                 fn() => Link::where('referral', $referral)->first());
 

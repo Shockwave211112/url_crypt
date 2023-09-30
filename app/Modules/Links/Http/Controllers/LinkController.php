@@ -124,7 +124,7 @@ class LinkController extends Controller
      *          example="asc"
      *      ),
      *     @OA\Parameter(
-     *          description="Sorting statistic by: (day | month | year). Nothing = deafult = full date.",
+     *          description="Sorting statistic by: (day | month | year | hits). Nothing = deafult = full date.",
      *          in="query",
      *          name="by",
      *          example="day"
