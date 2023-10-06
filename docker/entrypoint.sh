@@ -2,6 +2,8 @@
 
 composer update
 
+php artisan key:generate
+
 php artisan optimize:clear
 
 php artisan optimize

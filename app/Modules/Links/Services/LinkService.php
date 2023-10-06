@@ -52,7 +52,7 @@ class LinkService
                 fn() => Link::find($id));
 
         if ($link) {
-            Cache::tags('Referral')->put("Link:" . $link->referral, now()->addMinutes(180));
+            Cache::tags('Referral')->put("Link:" . $link->referral, $link, now()->addMinutes(180));
             $linkStat = $link->stats();
 
             if (isset($request['sort'])) $sortType = $request['sort'];
