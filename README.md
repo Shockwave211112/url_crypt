@@ -1,6 +1,23 @@
 # Links
 
-Laravel v10.26.2, PHP 8.1
+>Laravel v10.26.2
+> 
+>PHP 8.1
+> 
+>Spattie Permissions
+>
+>L5-Swagger Documentation
+>
+>Разделение проекта на модули (App -> Modules)
+> 
+>Унифицированный CRUD репозиторий
+> 
+>Кэширование GET запросов
+> 
+>Автозаполнение таблицы прав из контроллеров
+> 
+>Google & Facebook auth
+
 
 Docker-контейнеры настроены на локальный запуск по адресу http://localhost:8000
 
