@@ -33,7 +33,7 @@ class DeleteUsersTest extends TestCase
         );
     }
 
-    public function testShouldResponseWithHttpUnathIfWithoutToken()
+    public function testShouldResponseWithHttpUnauthIfWithoutToken()
     {
         $user = User::factory()->create();
 

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Modules\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tests\TestCase;

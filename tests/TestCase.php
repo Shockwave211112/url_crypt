@@ -47,9 +47,10 @@ abstract class TestCase extends BaseTestCase
             if (!$user) {
                 $user = User::role($role)->first();
             }
-            $user->password = '11111111';
-            $user->update();
-
+            else {
+                $user->password = '11111111';
+                $user->update();
+            }
             $userData = [
                 'email' => $user->email,
                 'password' => '11111111',

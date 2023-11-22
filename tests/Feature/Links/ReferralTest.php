@@ -4,7 +4,6 @@ namespace Tests\Feature\Links;
 
 use App\Modules\Links\Jobs\LinkHit;
 use App\Modules\Links\Models\Link;
-use App\Modules\Links\Models\LinkStatistic;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Queue;
